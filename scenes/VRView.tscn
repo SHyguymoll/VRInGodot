@@ -1,0 +1,47 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://addons/godot-openxr/scenes/first_person_controller_vr.tscn" type="PackedScene" id=1]
+[ext_resource path="res://models/Revolver.glb" type="PackedScene" id=2]
+[ext_resource path="res://addons/godot-openxr/scenes/left_hand_material.tres" type="Material" id=3]
+[ext_resource path="res://addons/godot-openxr/scenes/right_hand_material.tres" type="Material" id=4]
+
+[sub_resource type="PlaneMesh" id=1]
+size = Vector2( 10, 10 )
+
+[node name="Spatial" type="Spatial"]
+
+[node name="FPController" parent="." instance=ExtResource( 1 )]
+
+[node name="ARVRCamera" parent="FPController" index="1"]
+far = 1000.0
+
+[node name="SpotLight" type="SpotLight" parent="FPController/ARVRCamera" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.555047, 0 )
+spot_angle = 13.573
+
+[node name="LeftHandController" parent="FPController" index="2"]
+visible = true
+
+[node name="RevolverLeft" parent="FPController/LeftHandController" index="0" instance=ExtResource( 2 )]
+transform = Transform( 4.15864e-09, 0.0951387, 3.6356e-16, 0.0951387, -4.15864e-09, 8.31729e-09, 8.31729e-09, 0, -0.0951387, 0, 0, 0 )
+
+[node name="Revolver" parent="FPController/LeftHandController/RevolverLeft" index="0"]
+transform = Transform( 0.1, 0, 9.95325e-16, -3.19573e-30, -3.57628e-07, -0.6, 0, 1, -2.14577e-07, 1.1763, 0, -1.36 )
+material/0 = ExtResource( 3 )
+
+[node name="RightHandController" parent="FPController" index="3"]
+visible = true
+
+[node name="RevolverRight" parent="FPController/RightHandController" index="0" instance=ExtResource( 2 )]
+transform = Transform( 4.15864e-09, 0.0951387, 3.6356e-16, 0.0951387, -4.15864e-09, 8.31729e-09, 8.31729e-09, 0, -0.0951387, 0, -5.96046e-08, 5.96046e-08 )
+
+[node name="Revolver" parent="FPController/RightHandController/RevolverRight" index="0"]
+transform = Transform( 0.1, 0, 9.95325e-16, -3.19573e-30, -3.57628e-07, -0.6, 0, 1, -2.14577e-07, 1.1763, 0, -1.36 )
+material/0 = ExtResource( 4 )
+
+[node name="Ground" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+
+[editable path="FPController"]
+[editable path="FPController/LeftHandController/RevolverLeft"]
+[editable path="FPController/RightHandController/RevolverRight"]
