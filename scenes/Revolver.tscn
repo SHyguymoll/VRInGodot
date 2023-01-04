@@ -7,9 +7,24 @@
 [node name="Revolver" instance=ExtResource( 1 )]
 transform = Transform( -4.37114e-09, -0.1, 0, 0.1, -4.37114e-09, 0, 0, 0, 0.1, 0, 0, 0 )
 script = ExtResource( 3 )
+ammo = 6
+ammo_change = 1
+reload_time = 1.2
+reload_amount = 6
+fire_break_time = 0.666
+accuracy_initial = 1.0
+accuracy_held = 0.7
+accuracy_lerp = 0.15
 
 [node name="Revolver" parent="." index="0"]
 transform = Transform( 0.1, 0, 0, 0, -4.37114e-08, 0.6, 0, -1, -2.62268e-08, 1.1763, 0, -1.36 )
 material/0 = ExtResource( 2 )
 
 [node name="ReloadTimer" type="Timer" parent="." index="1"]
+
+[node name="FirePauseTimer" type="Timer" parent="." index="2"]
+
+[node name="Camera" type="Camera" parent="." index="3"]
+transform = Transform( -4.37114e-07, 10, 5.68434e-14, 4.37114e-07, 1.13687e-13, -10, -10, -4.37114e-07, -4.37114e-07, -7.09386e-07, -16.2289, 0 )
+
+[node name="RevolverAnimations" type="AnimationPlayer" parent="." index="4"]
