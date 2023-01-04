@@ -1,11 +1,71 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://models/Revolver.glb" type="PackedScene" id=1]
-[ext_resource path="res://addons/godot-openxr/scenes/right_hand_material.tres" type="Material" id=2]
+[ext_resource path="res://models/Revolver.obj" type="ArrayMesh" id=1]
 [ext_resource path="res://scripts/GenericGun.gd" type="Script" id=3]
 
-[node name="Revolver" instance=ExtResource( 1 )]
-transform = Transform( -4.37114e-09, -0.1, 0, 0.1, -4.37114e-09, 0, 0, 0, 0.1, 0, 0, 0 )
+[sub_resource type="Animation" id=1]
+resource_name = "Fire"
+length = 0.666
+tracks/0/type = "transform"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0.27126, 0.233937, 0, 0, 0.972252, 1, 1, 1, 0.1, 1, 0, 0.0394472, 0.324828, 0.309067, 0, 0, 0.95104, 1, 1, 1, 0.2, 1, 0, -0.0527714, 0.195248, 0.169599, 0, 0, 0.985513, 1, 1, 1, 0.6, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
+tracks/1/type = "value"
+tracks/1/path = NodePath("../Particles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "Idle"
+tracks/0/type = "transform"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0.5, 1, 0, -0.0178281, 0.00393152, 0.0147475, 0, 0, 0.999891, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+emission_shape = 1
+emission_sphere_radius = 0.25
+direction = Vector3( 0, 0, -1 )
+spread = 5.75
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 75.47
+hue_variation = 0.6
+anim_offset = 1.0
+
+[sub_resource type="SpatialMaterial" id=4]
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+emission_enabled = true
+emission = Color( 1, 0.933333, 0, 1 )
+emission_energy = 5.44
+emission_operator = 0
+emission_on_uv2 = false
+distance_fade_mode = 2
+distance_fade_min_distance = 10.0
+distance_fade_max_distance = 0.0
+
+[sub_resource type="SphereMesh" id=5]
+material = SubResource( 4 )
+radius = 0.25
+height = 0.5
+
+[node name="Revolver" type="Spatial"]
 script = ExtResource( 3 )
 ammo = 6
 ammo_change = 1
@@ -14,17 +74,31 @@ reload_amount = 6
 fire_break_time = 0.666
 accuracy_initial = 1.0
 accuracy_held = 0.7
-accuracy_lerp = 0.15
+accuracy_lerp = 0.3
 
-[node name="Revolver" parent="." index="0"]
-transform = Transform( 0.1, 0, 0, 0, -4.37114e-08, 0.6, 0, -1, -2.62268e-08, 1.1763, 0, -1.36 )
-material/0 = ExtResource( 2 )
+[node name="Model" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.890547, -0.454892, 0, 0.454892, 0.890547, 0, 0, 0.27126 )
+mesh = ExtResource( 1 )
 
-[node name="ReloadTimer" type="Timer" parent="." index="1"]
+[node name="ReloadTimer" type="Timer" parent="."]
 
-[node name="FirePauseTimer" type="Timer" parent="." index="2"]
+[node name="FirePauseTimer" type="Timer" parent="."]
 
-[node name="Camera" type="Camera" parent="." index="3"]
-transform = Transform( -4.37114e-07, 10, 5.68434e-14, 4.37114e-07, 1.13687e-13, -10, -10, -4.37114e-07, -4.37114e-07, -7.09386e-07, -16.2289, 0 )
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 3.30517, 0, 2.28611 )
 
-[node name="RevolverAnimations" type="AnimationPlayer" parent="." index="4"]
+[node name="Animations" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Model")
+anims/Fire = SubResource( 1 )
+anims/Idle = SubResource( 2 )
+
+[node name="Particles" type="Particles" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.26067 )
+amount = 10
+lifetime = 0.23
+one_shot = true
+explosiveness = 0.88
+fract_delta = false
+visibility_aabb = AABB( -0.618763, -0.413724, -0.797697, 1.23753, 0.827449, 1.59539 )
+process_material = SubResource( 3 )
+draw_pass_1 = SubResource( 5 )

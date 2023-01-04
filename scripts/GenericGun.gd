@@ -1,5 +1,8 @@
 extends Spatial
 
+signal fire_weapon
+signal reload_weapon
+
 export var left_hand = false #if in the left hand
 export var ammo: int #current ammo in gun
 export var ammo_change: int #how much ammo is used when firing
@@ -12,6 +15,7 @@ export var accuracy_initial: float #initial accuracy
 export var accuracy_held: float #accuracy lerped to while holding down the trigger
 export var accuracy_lerp: float #lerp value for changing accuracy
 var state: int #current state of gun
+onready var animations = $Animations
 
 var fire_button = ""
 var reload_button = ""
@@ -37,16 +41,19 @@ func _ready():
 
 func reload_routine():
 	print("reloading!")
+	emit_signal("reload_weapon")
 	reload_timer.start()
 	state = states.RELOADING
 
 func fire_routine():
+	animations.play("Fire")
 	make_bullet(current_accuracy, ammo_change)
 	fire_pause_timer.start()
 
 func _process(delta):
 	match state:
 		states.IDLE:
+			animations.play("Idle")
 			if ammo < 1:
 				reload_routine()
 			if Input.is_action_pressed(fire_button):
@@ -75,4 +82,5 @@ func _process(delta):
 
 func make_bullet(accuracy: float, cost: int):
 	ammo -= cost
+	emit_signal("fire_weapon", ammo, accuracy)
 	print("firing " + ("last " if ammo < 1 else "") + "bullet with " + str(accuracy) + " accuracy!")
