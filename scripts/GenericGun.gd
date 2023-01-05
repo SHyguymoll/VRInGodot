@@ -3,6 +3,7 @@ extends Spatial
 signal fire_weapon
 signal reload_weapon
 
+export var weapon_name: String
 export var left_hand = false #if in the left hand
 export var ammo: int #current ammo in gun
 export var ammo_change: int #how much ammo is used when firing
@@ -16,16 +17,17 @@ export var accuracy_held: float #accuracy lerped to while holding down the trigg
 export var accuracy_lerp: float #lerp value for changing accuracy
 var state: int #current state of gun
 onready var animations = $Animations
-
+onready var fire_sound = $FireSound
+onready var model = $Model
 var fire_button = ""
 var reload_button = ""
 var current_accuracy = 0.0
 
 enum states {
+	DISABLED, #always 0
 	IDLE,
 	FIRING,
 	RELOADING,
-	DISABLED
 }
 
 func _ready():
@@ -41,7 +43,7 @@ func _ready():
 
 func reload_routine():
 	print("reloading!")
-	emit_signal("reload_weapon")
+	animations.play("Reload")
 	reload_timer.start()
 	state = states.RELOADING
 
@@ -53,6 +55,7 @@ func fire_routine():
 func _process(delta):
 	match state:
 		states.IDLE:
+			model.show()
 			animations.play("Idle")
 			if ammo < 1:
 				reload_routine()
@@ -74,11 +77,12 @@ func _process(delta):
 						state = states.IDLE
 		states.RELOADING:
 			if reload_timer.is_stopped():
-				print("reloaded!")
 				ammo = reload_amount
+				emit_signal("reload_weapon", ammo)
+				print("reloaded!")
 				state = states.IDLE
 		states.DISABLED:
-			pass
+			model.hide()
 
 func make_bullet(accuracy: float, cost: int):
 	ammo -= cost
