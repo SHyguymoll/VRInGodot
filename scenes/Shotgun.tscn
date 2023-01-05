@@ -1,0 +1,132 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://models/Shotgun.obj" type="ArrayMesh" id=1]
+[ext_resource path="res://sounds/ShotgunShoot.wav" type="AudioStream" id=2]
+[ext_resource path="res://scripts/GenericGun.gd" type="Script" id=3]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Fire"
+tracks/0/type = "transform"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0.27126, 0.233937, 0, 0, 0.972252, 1, 1, 1, 0.2, 1, 0, 0.0394472, 0.324828, 0.309067, 0, 0, 0.95104, 1, 1, 1, 0.3, 1, 0, 0.0394472, 0.324828, 0.309067, 0, 0, 0.95104, 1, 1, 1, 0.5, 1, 0, -0.0527714, 0.195248, 0.169599, 0, 0, 0.985513, 1, 1, 1, 0.6, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
+tracks/1/type = "value"
+tracks/1/path = NodePath("../Particles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("../FireSound")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ 0.0 ],
+"method": "play"
+} ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "Idle"
+tracks/0/type = "transform"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0.5, 1, 0, -0.0178281, 0.00393152, 0.0147475, 0, 0, 0.999891, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
+
+[sub_resource type="Animation" id=6]
+resource_name = "Reload"
+length = 0.4
+tracks/0/type = "transform"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0.01, 1, 0, 0, 0, -0.148034, 0, 0, 0.988982, 1, 1, 1, 0.1, 1, 0, 0, 0, 0.910449, 0, 0, 0.413621, 1, 1, 1, 0.15, 1, 0, 0, 0, -0.587079, 0, 0, 0.80953, 1, 1, 1, 0.3, 1, 0, 0, 0, 0.245375, 0, 0, 0.969428, 1, 1, 1, 0.34, 1, 0, 0, 0, -0.0282967, 0, 0, 0.9996, 1, 1, 1, 0.4, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+emission_shape = 1
+emission_sphere_radius = 0.25
+direction = Vector3( 0, 0, -1 )
+spread = 5.75
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 75.47
+initial_velocity_random = 0.83
+angular_velocity = 91.91
+angular_velocity_random = 0.5
+hue_variation = 0.6
+anim_offset = 1.0
+
+[sub_resource type="SpatialMaterial" id=8]
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_color = Color( 0.411765, 0.411765, 0.411765, 1 )
+distance_fade_mode = 2
+distance_fade_min_distance = 8.0
+distance_fade_max_distance = 0.0
+
+[sub_resource type="SphereMesh" id=5]
+material = SubResource( 8 )
+radius = 0.25
+height = 0.5
+
+[node name="Shotgun" type="Spatial"]
+script = ExtResource( 3 )
+weapon_name = "DB Shotgun"
+ammo = 2
+ammo_change = 2
+reload_time = 0.4
+reload_amount = 2
+fire_break_time = 1.0
+accuracy_initial = 0.6
+accuracy_held = 0.6
+accuracy_lerp = 1.0
+
+[node name="Model" type="MeshInstance" parent="."]
+mesh = ExtResource( 1 )
+
+[node name="ReloadTimer" type="Timer" parent="."]
+
+[node name="FirePauseTimer" type="Timer" parent="."]
+
+[node name="Animations" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Model")
+anims/Fire = SubResource( 1 )
+anims/Idle = SubResource( 2 )
+anims/Reload = SubResource( 6 )
+
+[node name="Particles" type="Particles" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.75422 )
+emitting = false
+amount = 100
+one_shot = true
+explosiveness = 1.0
+fract_delta = false
+visibility_aabb = AABB( -5.12087, -2.53806, -4.13646, 10.2417, 5.07613, 8.27292 )
+process_material = SubResource( 7 )
+draw_pass_1 = SubResource( 5 )
+
+[node name="FireSound" type="AudioStreamPlayer3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.65299 )
+stream = ExtResource( 2 )
+unit_db = 11.0
+max_db = 6.0
