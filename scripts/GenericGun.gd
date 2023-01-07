@@ -20,6 +20,8 @@ var state: int #current state of gun
 onready var animations = $Animations
 onready var fire_sound = $FireSound
 onready var model = $Model
+onready var crosshair_ray = $BulletFirePosition
+onready var crosshair = $BulletFirePosition/Crosshair
 var fire_button = ""
 var reload_button = ""
 var current_accuracy = 0.0
@@ -58,6 +60,9 @@ func _process(delta):
 		states.IDLE:
 			model.show()
 			animations.play("Idle")
+			crosshair.show()
+			var test_col = crosshair_ray.get_collider()
+			crosshair.translation = test_col.global_translation if test_col != null else Vector3(0,0,-10)
 			if ammo < 1:
 				reload_routine()
 			if Input.is_action_pressed(fire_button):
@@ -66,6 +71,7 @@ func _process(delta):
 				state = states.FIRING
 			if Input.is_action_pressed(reload_button) and ammo < max_ammo:
 				reload_routine()
+				
 		states.FIRING:
 			if fire_pause_timer.is_stopped():
 				if ammo < 1:
