@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scenes/Weapons/Primaries/Revolver.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/WeaponsTest.gd" type="Script" id=2]
@@ -8,6 +8,8 @@
 [ext_resource path="res://scenes/Weapons/Secondaries/Coin.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scripts/OrbitCamera.gd" type="Script" id=7]
 [ext_resource path="res://scenes/Projectiles/CoinProjectile.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/Projectiles/RevolverBullet.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/Effects/HitSpark.tscn" type="PackedScene" id=10]
 
 [sub_resource type="CubeMesh" id=1]
 size = Vector3( 3, 3, 2.041 )
@@ -38,6 +40,8 @@ font_data = ExtResource( 4 )
 [node name="Area" type="Spatial"]
 script = ExtResource( 2 )
 CoinProjectile = ExtResource( 8 )
+RevolverBullet = ExtResource( 9 )
+ParticleCollision = ExtResource( 10 )
 
 [node name="Spatial" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.13715 )

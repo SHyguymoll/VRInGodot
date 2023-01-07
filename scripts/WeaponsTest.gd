@@ -5,6 +5,8 @@ export (PackedScene) var RevolverBullet
 export (PackedScene) var ShotgunShell
 export (PackedScene) var GrenadeProjectile
 
+export (PackedScene) var ParticleCollision
+
 const COIN_SPEED = 5
 
 var primary_list
@@ -57,7 +59,21 @@ func set_accuracy_size(value):
 
 func _on_Revolver_fire_weapon(ammo, accuracy):
 	$PrimaryAmmo.text = str(ammo) + "/6"
+	var newBullet = RevolverBullet.instance()
+	add_child(newBullet)
+	newBullet.translation = $Weapons_Primary/Revolver/BulletFirePosition.global_translation
+	newBullet.rotation = $Weapons_Primary/Revolver/BulletFirePosition.global_rotation
+	newBullet.rotation += Vector3(
+		rand_range(0,1-accuracy),
+		rand_range(0,1-accuracy),
+		rand_range(0,1-accuracy)
+	)
 	set_accuracy_size(1-accuracy)
+	var collide = get_world().direct_space_state.intersect_ray(newBullet.global_translation, newBullet.get_node("BulletFireMax").global_translation)
+	if len(collide) != 0: #collision detected
+		var newParticle = ParticleCollision.instance()
+		add_child(newParticle)
+		newParticle.translation = collide.get("position")
 
 func _on_Revolver_reload_weapon(ammo):
 	$PrimaryAmmo.text = str(ammo) + "/6"

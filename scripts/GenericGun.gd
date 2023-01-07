@@ -53,7 +53,7 @@ func fire_routine():
 	make_bullet(current_accuracy, ammo_change)
 	fire_pause_timer.start()
 
-func _process(_delta):
+func _process(delta):
 	match state:
 		states.IDLE:
 			model.show()
