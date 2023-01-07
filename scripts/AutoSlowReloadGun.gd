@@ -1,6 +1,6 @@
 extends Spatial
 
-#The most basic gun. Reloads its entire clip when empty, or when the reload key is pressed.
+#A gun that reloads piecemeal over time.
 
 signal fire_weapon
 signal reload_weapon
@@ -11,7 +11,8 @@ export var ammo: int #current ammo in gun
 export var ammo_change: int #how much ammo is used when firing
 export var reload_time: float #time for reloading
 onready var reload_timer = $ReloadTimer
-export var reload_amount: int #what ammo gets set to after reloading
+export var reload_change: int #how much ammo changes by when reloading
+export var max_ammo: int #maximum ammo
 export var fire_break_time: float #time between shots
 onready var fire_pause_timer = $FirePauseTimer
 export var accuracy_initial: float #initial accuracy
@@ -22,36 +23,30 @@ onready var animations = $Animations
 onready var fire_sound = $FireSound
 onready var model = $Model
 var fire_button = ""
-var reload_button = ""
 var current_accuracy = 0.0
 
 enum states {
 	DISABLED, #always 0
-	IDLE,
+	IDLE, #always 1
 	FIRING,
-	RELOADING,
 }
 
 func _ready():
-	ammo = reload_amount
+	ammo = max_ammo
 	reload_timer.wait_time = reload_time
-	reload_timer.one_shot = true
+	reload_timer.one_shot = false
+	reload_timer.start()
+	reload_timer.connect("timeout", self, "_on_ReloadTimer_timeout")
 	fire_pause_timer.wait_time = fire_break_time
 	fire_pause_timer.one_shot = true
 	
 	fire_button = "fire_" + ("right" if !left_hand else "left")
-	reload_button = "reload_" + ("right" if !left_hand else "left")
 	state = states.IDLE
-
-func reload_routine():
-	print("reloading!")
-	animations.play("Reload")
-	reload_timer.start()
-	state = states.RELOADING
 
 func fire_routine():
 	animations.play("Fire")
 	make_bullet(current_accuracy, ammo_change)
+	reload_timer.stop()
 	fire_pause_timer.start()
 
 func _process(delta):
@@ -59,27 +54,25 @@ func _process(delta):
 		states.IDLE:
 			model.show()
 			animations.play("Idle")
-			if ammo < 1:
-				reload_routine()
+			if ammo < max_ammo:
+				reload_timer.paused = 0
+			else:
+				reload_timer.paused = 1
 			if Input.is_action_pressed(fire_button):
 				current_accuracy = accuracy_initial
 				fire_routine()
 				state = states.FIRING
-			if Input.is_action_pressed(reload_button) and ammo < reload_amount:
-				reload_routine()
 		states.FIRING:
 			if fire_pause_timer.is_stopped():
-				if ammo < 1:
-					reload_routine()
-				else:
-					if Input.is_action_pressed(fire_button): #still holding the button
-						current_accuracy = lerp(current_accuracy, accuracy_held, accuracy_lerp)
-						fire_routine()
-					else: #let go of the button
-						state = states.IDLE
+				reload_timer.start()
+				if Input.is_action_pressed(fire_button): #still holding the button
+					current_accuracy = lerp(current_accuracy, accuracy_held, accuracy_lerp)
+					fire_routine()
+				else: #let go of the button
+					state = states.IDLE
 		states.RELOADING:
 			if reload_timer.is_stopped():
-				ammo = reload_amount
+				ammo = int(min(ammo + reload_change, max_ammo))
 				emit_signal("reload_weapon", ammo)
 				print("reloaded!")
 				state = states.IDLE
@@ -90,3 +83,9 @@ func make_bullet(accuracy: float, cost: int):
 	ammo -= cost
 	emit_signal("fire_weapon", ammo, accuracy)
 	print("firing " + ("last " if ammo < 1 else "") + "bullet with " + str(accuracy) + " accuracy!")
+
+
+func _on_ReloadTimer_timeout():
+	ammo = int(min(ammo + reload_change, max_ammo))
+	emit_signal("reload_weapon", ammo)
+	print("reloaded!")

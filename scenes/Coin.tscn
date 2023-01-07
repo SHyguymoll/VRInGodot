@@ -1,19 +1,19 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://models/Revolver.obj" type="ArrayMesh" id=1]
-[ext_resource path="res://sounds/RevolverShoot.wav" type="AudioStream" id=2]
-[ext_resource path="res://scripts/GenericGun.gd" type="Script" id=3]
+[ext_resource path="res://models/Coin.obj" type="ArrayMesh" id=1]
+[ext_resource path="res://sounds/CoinToss.wav" type="AudioStream" id=2]
+[ext_resource path="res://scripts/AutoSlowReloadGun.gd" type="Script" id=3]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Fire"
-length = 0.666
+length = 0.333
 tracks/0/type = "transform"
 tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = false
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0.27126, 0.233937, 0, 0, 0.972252, 1, 1, 1, 0.1, 1, 0, 0.0394472, 0.324828, 0.309067, 0, 0, 0.95104, 1, 1, 1, 0.2, 1, 0, -0.0527714, 0.195248, 0.169599, 0, 0, 0.985513, 1, 1, 1, 0.6, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
+tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0.27126, 0.233937, 0, 0, 0.972252, 1, 1, 1, 0.2, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
 tracks/1/type = "value"
 tracks/1/path = NodePath("../Particles:emitting")
 tracks/1/interp = 1
@@ -51,60 +51,50 @@ tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0.5, 1, 0, -0.0178281, 0.00393152, 0.0147475, 0, 0, 0.999891, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
 
-[sub_resource type="Animation" id=6]
-resource_name = "Reload"
-length = 1.2
-tracks/0/type = "transform"
-tracks/0/path = NodePath(".")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0.2, 1, 0, 0, 0, -0.148034, 0, 0, 0.988982, 1, 1, 1, 0.4, 1, 0, 0, 0, 0.910449, 0, 0, 0.413621, 1, 1, 1, 0.5, 1, 0, 0, 0, -0.587079, 0, 0, 0.80953, 1, 1, 1, 0.7, 1, 0, 0, 0, 0.245375, 0, 0, 0.969428, 1, 1, 1, 0.9, 1, 0, 0, 0, -0.0282967, 0, 0, 0.9996, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
-
 [sub_resource type="ParticlesMaterial" id=3]
-emission_shape = 1
-emission_sphere_radius = 0.25
-direction = Vector3( 0, 0, -1 )
-spread = 5.75
+direction = Vector3( 0, 1, 0 )
+spread = 24.55
 gravity = Vector3( 0, 0, 0 )
-initial_velocity = 75.47
-hue_variation = 0.6
-anim_offset = 1.0
+initial_velocity = 20.0
+initial_velocity_random = 0.49
+angular_velocity = 720.0
+angular_velocity_random = 1.0
+tangential_accel = 45.45
+angle_random = 1.0
+scale = 0.25
+scale_random = 1.0
+hue_variation = -1.0
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="SpatialMaterial" id=7]
+flags_unshaded = true
 params_billboard_mode = 3
 particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
-emission_enabled = true
-emission = Color( 1, 0.933333, 0, 1 )
-emission_energy = 5.44
-emission_operator = 0
-emission_on_uv2 = false
+albedo_color = Color( 1, 0.94902, 0, 1 )
 distance_fade_mode = 2
-distance_fade_min_distance = 10.0
+distance_fade_min_distance = 5.0
 distance_fade_max_distance = 0.0
 
-[sub_resource type="SphereMesh" id=5]
-material = SubResource( 4 )
-radius = 0.25
-height = 0.5
+[sub_resource type="PrismMesh" id=8]
+material = SubResource( 7 )
+size = Vector3( 0.5, 0.5, 0.5 )
 
-[node name="Revolver" type="Spatial"]
+[node name="Coin" type="Spatial"]
 script = ExtResource( 3 )
-weapon_name = "Revolver"
-ammo = 6
+weapon_name = "Coin"
+left_hand = true
+ammo = 4
 ammo_change = 1
-reload_time = 1.2
-reload_amount = 6
-fire_break_time = 0.666
+reload_time = 3.333
+reload_change = 1
+max_ammo = 4
+fire_break_time = 0.333
 accuracy_initial = 1.0
-accuracy_held = 0.7
-accuracy_lerp = 0.3
+accuracy_held = 1.0
+accuracy_lerp = 1.0
 
 [node name="Model" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.890547, -0.454891, 0, 0.454891, 0.890547, 0, 0, 0.27126 )
 mesh = ExtResource( 1 )
 
 [node name="ReloadTimer" type="Timer" parent="."]
@@ -115,18 +105,18 @@ mesh = ExtResource( 1 )
 root_node = NodePath("../Model")
 anims/Fire = SubResource( 1 )
 anims/Idle = SubResource( 2 )
-anims/Reload = SubResource( 6 )
 
 [node name="Particles" type="Particles" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.26067 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24405, 0, 0.117412 )
+emitting = false
 amount = 10
-lifetime = 0.23
+lifetime = 0.67
 one_shot = true
-explosiveness = 0.88
+explosiveness = 1.0
 fract_delta = false
-visibility_aabb = AABB( -5.12087, -2.53806, -4.13646, 10.2417, 5.07613, 8.27292 )
+visibility_aabb = AABB( -1.58652, -1.316, -1.49013, 3.173, 2.63201, 2.98026 )
 process_material = SubResource( 3 )
-draw_pass_1 = SubResource( 5 )
+draw_pass_1 = SubResource( 8 )
 
 [node name="FireSound" type="AudioStreamPlayer3D" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.11867 )

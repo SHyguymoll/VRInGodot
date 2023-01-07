@@ -2,11 +2,13 @@
 
 importer="wav"
 type="AudioStreamSample"
-valid=false
+path="res://.import/CoinToss.wav-491c16ff18beb8392ba8f443a0b1bcf9.sample"
 
 [deps]
 
-source_file="res://sounds/z_DONOTUSERevolverSound.wav"
+source_file="res://sounds/CoinToss.wav"
+dest_files=[ "res://.import/CoinToss.wav-491c16ff18beb8392ba8f443a0b1bcf9.sample" ]
+
 [params]
 
 force/8_bit=false

@@ -47,3 +47,10 @@ func _on_Shotgun_fire_weapon(ammo, accuracy):
 func _on_Shotgun_reload_weapon(ammo):
 	$WeaponAmmo.text = str(ammo) + "/2"
 	set_accuracy_size(0)
+
+func _on_Coin_fire_weapon(ammo, accuracy):
+	$WeaponAmmo.text = str(ammo) + "/4"
+	set_accuracy_size(1-accuracy)
+
+func _on_Coin_reload_weapon(ammo):
+	$WeaponAmmo.text = str(ammo) + "/4"

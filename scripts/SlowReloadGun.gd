@@ -1,6 +1,6 @@
 extends Spatial
 
-#The most basic gun. Reloads its entire clip when empty, or when the reload key is pressed.
+#A gun that reloads piecemeal rather than all at once.
 
 signal fire_weapon
 signal reload_weapon
@@ -11,7 +11,8 @@ export var ammo: int #current ammo in gun
 export var ammo_change: int #how much ammo is used when firing
 export var reload_time: float #time for reloading
 onready var reload_timer = $ReloadTimer
-export var reload_amount: int #what ammo gets set to after reloading
+export var reload_change: int #how much ammo changes by when reloading
+export var max_ammo: int #maximum ammo
 export var fire_break_time: float #time between shots
 onready var fire_pause_timer = $FirePauseTimer
 export var accuracy_initial: float #initial accuracy
@@ -33,7 +34,7 @@ enum states {
 }
 
 func _ready():
-	ammo = reload_amount
+	ammo = max_ammo
 	reload_timer.wait_time = reload_time
 	reload_timer.one_shot = true
 	fire_pause_timer.wait_time = fire_break_time
@@ -65,7 +66,7 @@ func _process(delta):
 				current_accuracy = accuracy_initial
 				fire_routine()
 				state = states.FIRING
-			if Input.is_action_pressed(reload_button) and ammo < reload_amount:
+			if Input.is_action_pressed(reload_button) and ammo < max_ammo:
 				reload_routine()
 		states.FIRING:
 			if fire_pause_timer.is_stopped():
@@ -79,7 +80,7 @@ func _process(delta):
 						state = states.IDLE
 		states.RELOADING:
 			if reload_timer.is_stopped():
-				ammo = reload_amount
+				ammo = int(min(ammo + reload_change, max_ammo))
 				emit_signal("reload_weapon", ammo)
 				print("reloaded!")
 				state = states.IDLE
