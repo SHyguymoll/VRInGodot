@@ -1,5 +1,12 @@
 extends Spatial
 
+export (PackedScene) var CoinProjectile
+export (PackedScene) var RevolverBullet
+export (PackedScene) var ShotgunShell
+export (PackedScene) var GrenadeProjectile
+
+const COIN_SPEED = 5
+
 var primary_list
 var secondary_list
 var current_primary_index
@@ -38,7 +45,7 @@ func select_secondary(index):
 	$SecondaryAmmo.text = str(secondary_list[index].ammo) + "/" + str(secondary_list[index].max_ammo)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_released("primary_next"):
 		select_primary(current_primary_index + 1 if (current_primary_index < len(primary_list) - 1) else 0)
 	if Input.is_action_just_released("primary_prev"):
@@ -66,7 +73,10 @@ func _on_Shotgun_reload_weapon(ammo):
 
 func _on_Coin_fire_weapon(ammo, accuracy):
 	$SecondaryAmmo.text = str(ammo) + "/4"
-	set_accuracy_size(1-accuracy)
+	var newCoin = CoinProjectile.instance()
+	add_child(newCoin)
+	newCoin.translation = $Weapons_Secondary/Coin/CoinFireLocation.global_translation
+	newCoin.rotation = $Weapons_Secondary/Coin/CoinFireLocation.global_rotation
 
 func _on_Coin_reload_weapon(ammo):
 	$SecondaryAmmo.text = str(ammo) + "/4"

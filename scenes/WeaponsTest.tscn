@@ -1,17 +1,21 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://scenes/Revolver.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/Weapons/Primaries/Revolver.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/WeaponsTest.gd" type="Script" id=2]
 [ext_resource path="res://addons/godot-openxr/scenes/right_hand_material.tres" type="Material" id=3]
 [ext_resource path="res://fonts/OpenSans/OpenSans-VariableFont_wdth,wght.ttf" type="DynamicFontData" id=4]
-[ext_resource path="res://scenes/Shotgun.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/Coin.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/Weapons/Primaries/Shotgun.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/Weapons/Secondaries/Coin.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scripts/OrbitCamera.gd" type="Script" id=7]
+[ext_resource path="res://scenes/Projectiles/CoinProjectile.tscn" type="PackedScene" id=8]
 
 [sub_resource type="CubeMesh" id=1]
-size = Vector3( 3, 3, 0.25 )
+size = Vector3( 3, 3, 2.041 )
 
 [sub_resource type="CylinderMesh" id=2]
+
+[sub_resource type="BoxShape" id=6]
+extents = Vector3( 1.50548, 1.49665, 1.02852 )
 
 [sub_resource type="DynamicFont" id=3]
 size = 64
@@ -33,12 +37,14 @@ font_data = ExtResource( 4 )
 
 [node name="Area" type="Spatial"]
 script = ExtResource( 2 )
+CoinProjectile = ExtResource( 8 )
 
 [node name="Spatial" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.13715 )
 script = ExtResource( 7 )
 
 [node name="Camera" type="Camera" parent="Spatial"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.46649 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9.17069 )
 
 [node name="Weapons_Primary" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0 )
@@ -55,14 +61,37 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0 )
 [node name="Coin" parent="Weapons_Secondary" instance=ExtResource( 6 )]
 
 [node name="Wall" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -6.289 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -8.41067 )
 mesh = SubResource( 1 )
 
 [node name="Accuracy" type="MeshInstance" parent="Wall"]
-transform = Transform( 1, 0, 0, 0, -1.31134e-09, -1, 0, 0.03, -4.37114e-08, 0, 0, 0.115 )
+transform = Transform( 1, 0, 0, 0, -1.31134e-09, -1, 0, 0.03, -4.37114e-08, 0, 0, 1.04534 )
 mesh = SubResource( 2 )
 skeleton = NodePath("../..")
 material/0 = ExtResource( 3 )
+
+[node name="StaticBody" type="StaticBody" parent="Wall"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Wall/StaticBody"]
+shape = SubResource( 6 )
+
+[node name="Plane" type="MeshInstance" parent="."]
+transform = Transform( 7.904, 0, 0, 0, 0.078, 0, 0, 0, 10.27, -0.116785, -3.39341, -5.16097 )
+mesh = SubResource( 1 )
+
+[node name="StaticBody" type="StaticBody" parent="Plane"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Plane/StaticBody"]
+shape = SubResource( 6 )
+
+[node name="BackWall" type="MeshInstance" parent="."]
+transform = Transform( 7.904, 0, 0, 0, 4.303, 0, 0, 0, 0.384, -0.116785, 0.0822179, -15.6357 )
+mesh = SubResource( 1 )
+
+[node name="StaticBody" type="StaticBody" parent="BackWall"]
+
+[node name="CollisionShape" type="CollisionShape" parent="BackWall/StaticBody"]
+shape = SubResource( 6 )
 
 [node name="PrimaryName" type="Label" parent="."]
 anchor_right = 1.0

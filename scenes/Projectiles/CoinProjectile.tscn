@@ -1,0 +1,86 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://sounds/CoinToss.wav" type="AudioStream" id=1]
+[ext_resource path="res://scripts/CoinProjectile.gd" type="Script" id=2]
+[ext_resource path="res://models/CoinProjectile.obj" type="ArrayMesh" id=3]
+
+[sub_resource type="Animation" id=6]
+resource_name = "Spin"
+length = 0.25
+loop = true
+tracks/0/type = "transform"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0.25, 1, 0, 0, 0, 0.999981, 0, 0, -0.00614349, 1, 1, 1 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+direction = Vector3( 0, 0, 0 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+hue_variation = -1.0
+
+[sub_resource type="SpatialMaterial" id=4]
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_color = Color( 1, 1, 0, 1 )
+
+[sub_resource type="SphereMesh" id=5]
+material = SubResource( 4 )
+radius = 0.125
+height = 0.25
+
+[sub_resource type="BoxShape" id=7]
+extents = Vector3( 0.187, 0.187, 0.187 )
+
+[node name="Coin" type="RigidBody"]
+mass = 0.00510204
+linear_velocity = Vector3( 0, 5, -5 )
+script = ExtResource( 2 )
+
+[node name="Model" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.491594, 0.870825, 0, -0.870825, 0.491594, 0, 0, 0 )
+mesh = ExtResource( 3 )
+
+[node name="InactiveTimer" type="Timer" parent="."]
+wait_time = 0.666
+one_shot = true
+autostart = true
+
+[node name="SuperTimer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="LifeTimer" type="Timer" parent="."]
+wait_time = 6.0
+one_shot = true
+autostart = true
+
+[node name="Animations" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Model")
+anims/Spin = SubResource( 6 )
+
+[node name="Particles" type="Particles" parent="."]
+amount = 10
+lifetime = 0.1
+fract_delta = false
+visibility_aabb = AABB( -1.58652, -1.316, -1.49013, 3.173, 2.63201, 2.98026 )
+local_coords = false
+process_material = SubResource( 3 )
+draw_pass_1 = SubResource( 5 )
+
+[node name="FireSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 1 )
+unit_db = 8.0
+max_db = 6.0
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 7 )
+
+[connection signal="timeout" from="InactiveTimer" to="." method="_on_DeadTimer_timeout"]
+[connection signal="timeout" from="SuperTimer" to="." method="_on_SuperTimer_timeout"]
+[connection signal="timeout" from="LifeTimer" to="." method="_on_LifeTimer_timeout"]

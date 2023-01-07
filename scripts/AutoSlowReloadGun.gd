@@ -54,7 +54,7 @@ func fire_routine():
 	reload_timer.stop()
 	fire_pause_timer.start()
 
-func _process(delta):
+func _process(_delta):
 	match ammo_counter_type:
 		ammo_counters.SPRITE3D:
 			ammo_counter.frame = ammo
@@ -66,14 +66,14 @@ func _process(delta):
 				reload_timer.paused = 0
 			else:
 				reload_timer.paused = 1
-			if Input.is_action_pressed(fire_button):
+			if Input.is_action_pressed(fire_button) and (ammo-ammo_change >= 0):
 				current_accuracy = accuracy_initial
 				fire_routine()
 				state = states.FIRING
 		states.FIRING:
 			if fire_pause_timer.is_stopped():
 				reload_timer.start()
-				if Input.is_action_pressed(fire_button): #still holding the button
+				if Input.is_action_pressed(fire_button) and (ammo-ammo_change >= 0): #still holding the button
 					current_accuracy = lerp(current_accuracy, accuracy_held, accuracy_lerp)
 					fire_routine()
 				else: #let go of the button
