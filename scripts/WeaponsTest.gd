@@ -59,21 +59,40 @@ func set_accuracy_size(value):
 
 func _on_Revolver_fire_weapon(ammo, accuracy):
 	$PrimaryAmmo.text = str(ammo) + "/6"
-	var newBullet = RevolverBullet.instance()
-	add_child(newBullet)
-	newBullet.translation = $Weapons_Primary/Revolver/BulletFirePosition.global_translation
-	newBullet.rotation = $Weapons_Primary/Revolver/BulletFirePosition.global_rotation
-	newBullet.rotation += Vector3(
-		rand_range(0,1-accuracy),
-		rand_range(0,1-accuracy),
-		rand_range(0,1-accuracy)
+	create_revolver_bullet(
+		$Weapons_Primary/Revolver/BulletFirePosition.global_translation,
+		$Weapons_Primary/Revolver/BulletFirePosition.global_rotation,
+		accuracy
 	)
 	set_accuracy_size(1-accuracy)
-	var collide = get_world().direct_space_state.intersect_ray(newBullet.global_translation, newBullet.get_node("BulletFireMax").global_translation)
-	if len(collide) != 0: #collision detected
-		var newParticle = ParticleCollision.instance()
-		add_child(newParticle)
-		newParticle.translation = collide.get("position")
+
+func make_particle(position:Vector3, type:int):
+	var newParticle = ParticleCollision.instance()
+	add_child(newParticle)
+	newParticle.translation = position
+
+func create_revolver_bullet(start:Vector3, rot:Vector3, acc:float):
+	var newBullet = RevolverBullet.instance()
+	add_child(newBullet)
+	newBullet.translation = start
+	newBullet.rotation = rot
+	newBullet.rotation += Vector3(
+		rand_range(0,1-acc),
+		rand_range(0,1-acc),
+		rand_range(0,1-acc)
+	)
+
+func create_shotgun_blast(start:Vector3, rot:Vector3, acc:float):
+	for n in range(8):
+		var newBullet = ShotgunShell.instance()
+		add_child(newBullet)
+		newBullet.translation = start
+		newBullet.rotation = rot
+		newBullet.rotation += Vector3(
+			rand_range(0,1-acc),
+			rand_range(0,1-acc),
+			rand_range(0,1-acc)
+		)
 
 func _on_Revolver_reload_weapon(ammo):
 	$PrimaryAmmo.text = str(ammo) + "/6"
@@ -81,6 +100,16 @@ func _on_Revolver_reload_weapon(ammo):
 
 func _on_Shotgun_fire_weapon(ammo, accuracy):
 	$PrimaryAmmo.text = str(ammo) + "/2"
+	create_shotgun_blast(
+		$Weapons_Primary/Shotgun/FirePointA.global_translation,
+		$Weapons_Primary/Shotgun/FirePointA.global_rotation,
+		accuracy
+	)
+	create_shotgun_blast(
+		$Weapons_Primary/Shotgun/FirePointB.global_translation,
+		$Weapons_Primary/Shotgun/FirePointB.global_rotation,
+		accuracy
+	)
 	set_accuracy_size(1-accuracy)
 
 func _on_Shotgun_reload_weapon(ammo):

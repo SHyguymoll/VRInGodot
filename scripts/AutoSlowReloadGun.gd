@@ -66,14 +66,14 @@ func _process(_delta):
 				reload_timer.paused = 0
 			else:
 				reload_timer.paused = 1
-			if Input.is_action_pressed(fire_button) and (ammo-ammo_change >= 0):
+			if Input.is_action_just_pressed(fire_button) and (ammo-ammo_change >= 0):
 				current_accuracy = accuracy_initial
 				fire_routine()
 				state = states.FIRING
 		states.FIRING:
 			if fire_pause_timer.is_stopped():
 				reload_timer.start()
-				if Input.is_action_pressed(fire_button) and (ammo-ammo_change >= 0): #still holding the button
+				if Input.is_action_just_pressed(fire_button) and (ammo-ammo_change >= 0): #still holding the button
 					current_accuracy = lerp(current_accuracy, accuracy_held, accuracy_lerp)
 					fire_routine()
 				else: #let go of the button

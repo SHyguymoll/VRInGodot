@@ -2,7 +2,7 @@ extends Particles
 
 func _ready():
 	emitting = 1
-	$CrashSound.play()
+	#$CrashSound.play()
 
 func _process(delta):
 	if !emitting:

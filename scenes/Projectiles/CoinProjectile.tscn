@@ -39,6 +39,7 @@ extents = Vector3( 0.187, 0.187, 0.187 )
 
 [node name="Coin" type="RigidBody"]
 mass = 0.00510204
+gravity_scale = 0.5
 linear_velocity = Vector3( 0, 5, -5 )
 script = ExtResource( 2 )
 

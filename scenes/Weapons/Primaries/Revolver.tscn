@@ -95,8 +95,8 @@ ammo_change = 1
 reload_time = 1.2
 fire_break_time = 0.666
 accuracy_initial = 1.0
-accuracy_held = 0.9
-accuracy_lerp = 0.3
+accuracy_held = 0.95
+accuracy_lerp = 0.4
 
 [node name="BulletFirePosition" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.33782 )

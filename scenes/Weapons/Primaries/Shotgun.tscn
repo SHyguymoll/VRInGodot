@@ -101,6 +101,12 @@ accuracy_initial = 0.8
 accuracy_held = 0.8
 accuracy_lerp = 1.0
 
+[node name="FirePointA" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.158154, -0.0279849, -1.75422 )
+
+[node name="FirePointB" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.158, -0.028, -1.754 )
+
 [node name="Model" type="MeshInstance" parent="."]
 mesh = ExtResource( 1 )
 
