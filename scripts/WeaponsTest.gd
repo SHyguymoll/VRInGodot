@@ -19,7 +19,7 @@ func select_weapon(index):
 	weapon_list[index].state = 1 #states.IDLE, might add states.EQUIP or something later
 	current_weapon_index = index
 	$WeaponName.text = weapon_list[index].weapon_name
-	$WeaponAmmo.text = str(weapon_list[index].ammo) + "/" + str(weapon_list[index].reload_amount)
+	$WeaponAmmo.text = str(weapon_list[index].ammo) + "/" + str(weapon_list[index].max_ammo)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -33,24 +33,24 @@ func set_accuracy_size(value):
 	$Wall/Accuracy.scale.z = value
 
 func _on_Revolver_fire_weapon(ammo, accuracy):
-	$WeaponAmmo.text = str(ammo) + "/6"
+	$WeaponAmmo.text = str(ammo)
 	set_accuracy_size(1-accuracy)
 
 func _on_Revolver_reload_weapon(ammo):
-	$WeaponAmmo.text = str(ammo) + "/6"
+	$WeaponAmmo.text = str(ammo)
 	set_accuracy_size(0)
 
 func _on_Shotgun_fire_weapon(ammo, accuracy):
-	$WeaponAmmo.text = str(ammo) + "/2"
+	$WeaponAmmo.text = str(ammo)
 	set_accuracy_size(1-accuracy)
 
 func _on_Shotgun_reload_weapon(ammo):
-	$WeaponAmmo.text = str(ammo) + "/2"
+	$WeaponAmmo.text = str(ammo)
 	set_accuracy_size(0)
 
 func _on_Coin_fire_weapon(ammo, accuracy):
-	$WeaponAmmo.text = str(ammo) + "/4"
+	$WeaponAmmo.text = str(ammo)
 	set_accuracy_size(1-accuracy)
 
 func _on_Coin_reload_weapon(ammo):
-	$WeaponAmmo.text = str(ammo) + "/4"
+	$WeaponAmmo.text = str(ammo)

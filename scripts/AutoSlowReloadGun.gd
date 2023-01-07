@@ -70,12 +70,6 @@ func _process(delta):
 					fire_routine()
 				else: #let go of the button
 					state = states.IDLE
-		states.RELOADING:
-			if reload_timer.is_stopped():
-				ammo = int(min(ammo + reload_change, max_ammo))
-				emit_signal("reload_weapon", ammo)
-				print("reloaded!")
-				state = states.IDLE
 		states.DISABLED:
 			model.hide()
 

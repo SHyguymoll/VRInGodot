@@ -33,8 +33,10 @@ transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 5
 [node name="Weapons" type="Spatial" parent="."]
 
 [node name="Revolver" parent="Weapons" instance=ExtResource( 1 )]
+max_ammo = 6
 
 [node name="Shotgun" parent="Weapons" instance=ExtResource( 5 )]
+max_ammo = 2
 
 [node name="Coin" parent="Weapons" instance=ExtResource( 6 )]
 
