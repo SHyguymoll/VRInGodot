@@ -22,9 +22,14 @@ var state: int #current state of gun
 onready var animations = $Animations
 onready var fire_sound = $FireSound
 onready var model = $Model
+onready var ammo_counter = $Model/AmmoCounter #Node that tells the user the remaining ammo in gun
+export var ammo_counter_type: int #What the ammo counter is
 var fire_button = ""
 var current_accuracy = 0.0
 
+enum ammo_counters {
+	SPRITE3D,
+}
 enum states {
 	DISABLED, #always 0
 	IDLE, #always 1
@@ -50,6 +55,9 @@ func fire_routine():
 	fire_pause_timer.start()
 
 func _process(delta):
+	match ammo_counter_type:
+		ammo_counters.SPRITE3D:
+			ammo_counter.frame = ammo
 	match state:
 		states.IDLE:
 			model.show()
