@@ -97,8 +97,9 @@ func create_revolver_bullet(start:Vector3, rot:Vector3, acc:float):
 	var newBullet = RevolverBullet.instance()
 	add_child(newBullet)
 	newBullet.translation = start
-	newBullet.rotate_y(rot.y)
+	
 	newBullet.rotate_x(rot.x)
+	newBullet.rotate_y(rot.y)
 	newBullet.rotation += Vector3(
 		rand_range(0,1-acc),
 		rand_range(0,1-acc),
@@ -114,19 +115,13 @@ func create_shotgun_shell(start:Vector3, rot:Vector3, acc:float):
 	var newBullet = ShotgunShell.instance()
 	add_child(newBullet)
 	newBullet.translation = start
-	newBullet.rotate_y(rot.y)
-	newBullet.rotate_x(rot.x)
-	newBullet.rotation += Vector3(
-		rand_range(0,1-acc),
-		rand_range(0,1-acc),
-		rand_range(0,1-acc)
-	)
+	newBullet.rotate_y(rot.y + rand_range(-1+acc,1-acc))
+	newBullet.rotate_x(rot.x + rand_range(-1+acc,1-acc))
 	newBullet.act = 1
 
 func create_shotgun_blast(start:Vector3, rot:Vector3, acc:float):
 	for _n in range(8):
 		create_shotgun_shell(start, rot, acc)
-
 
 func _on_Shotgun_fire_weapon(ammo, accuracy):
 	$PrimaryAmmo.text = str(ammo) + "/2"
@@ -160,3 +155,6 @@ func _on_Coin_reload_weapon(ammo):
 
 func _on_Fist_swing_weapon(from, to):
 	print("Fist wants to make hitbox from ", from, " to ", to)
+
+func coin_bullet_rebound(start: Vector3, end: Vector3):
+	create_revolver_bullet(start, end - start, 1.0)

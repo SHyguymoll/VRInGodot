@@ -6,6 +6,7 @@ var col = {}
 var ent
 var col_pos
 var act = 0
+var is_a_bullet = true
 
 func _on_LifeTimer_timeout():
 	queue_free()
