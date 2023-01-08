@@ -3,6 +3,7 @@ extends RigidBody
 var active = 0
 var super_active = 1
 
+
 func _on_DeadTimer_timeout():
 	active = 1
 

@@ -22,10 +22,13 @@ var state: int #current state of gun
 onready var animations = $Animations
 onready var fire_sound = $FireSound
 onready var model = $Model
+onready var crosshair_ray = $BulletFirePosition
 onready var ammo_counter = $Model/AmmoCounter #Node that tells the user the remaining ammo in gun
 export var ammo_counter_type: int #What the ammo counter is
 var fire_button = ""
 var current_accuracy = 0.0
+var crosshair_distance = 0.0
+var crosshair_collision = Vector3(0,0,0)
 
 enum ammo_counters {
 	SPRITE3D,
@@ -62,6 +65,9 @@ func _process(_delta):
 		states.IDLE:
 			model.show()
 			animations.play("Idle")
+			var test_col = crosshair_ray.get_collision_point()
+			crosshair_distance = crosshair_ray.global_translation.distance_to(test_col) if crosshair_ray.is_colliding() else -3
+			crosshair_collision = test_col if crosshair_ray.is_colliding() else crosshair_ray.cast_to
 			if ammo < max_ammo:
 				reload_timer.paused = 0
 			else:

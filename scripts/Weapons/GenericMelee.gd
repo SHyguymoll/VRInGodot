@@ -19,7 +19,8 @@ var fire_button = ""
 var reload_button = ""
 var current_velocity = 0.0
 var previous_location = Vector3(0,0,0)
-var crosshair_rotation = Vector3(0,0,0)
+var crosshair_distance = 0.0
+var crosshair_collision = Vector3(0,0,0)
 
 enum states {
 	DISABLED, #always 0
@@ -46,8 +47,11 @@ func _process(delta):
 				emit_signal("swing_weapon", previous_location, translation)
 				active_effects.emitting = 1
 				active_timer.start()
-			crosshair_rotation = crosshair_ray.global_rotation
 			previous_location = translation
+			
+			var test_col = crosshair_ray.get_collision_point()
+			crosshair_distance = crosshair_ray.global_translation.distance_to(test_col) if crosshair_ray.is_colliding() else -10
+			crosshair_collision = test_col if crosshair_ray.is_colliding() else crosshair_ray.cast_to
 			
 		states.ACTIVE:
 			if active_timer.is_stopped():

@@ -93,6 +93,7 @@ weapon_name = "Revolver"
 ammo = 6
 ammo_change = 1
 reload_time = 1.2
+max_ammo = 6
 fire_break_time = 0.666
 accuracy_initial = 1.0
 accuracy_held = 0.95

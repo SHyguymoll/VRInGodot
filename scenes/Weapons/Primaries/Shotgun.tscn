@@ -96,6 +96,7 @@ weapon_name = "DB Shotgun"
 ammo = 2
 ammo_change = 2
 reload_time = 0.4
+max_ammo = 2
 fire_break_time = 1.0
 accuracy_initial = 0.8
 accuracy_held = 0.8

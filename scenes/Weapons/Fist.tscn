@@ -47,9 +47,8 @@ active_time = 0.3
 minimum_velocity = 10.0
 
 [node name="BulletFirePosition" type="RayCast" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.338 )
 enabled = true
-cast_to = Vector3( 0, 0, -1000 )
+cast_to = Vector3( 0, 0, -5 )
 
 [node name="Model" type="MeshInstance" parent="."]
 mesh = ExtResource( 1 )

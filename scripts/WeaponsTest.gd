@@ -7,7 +7,7 @@ export (PackedScene) var GrenadeProjectile
 
 export (PackedScene) var ParticleCollision
 
-const COIN_SPEED = 5
+const COIN_SPEED = 15
 
 var primary_list
 var secondary_list
@@ -38,7 +38,7 @@ func select_primary(index):
 	current_primary_index = index
 	$PrimaryCrosshairs.switch_crosshairs(index)
 	$PrimaryName.text = primary_list[index].weapon_name
-	$PrimaryAmmo.text = str(primary_list[index].ammo) if primary_list[index].get("ammo") else "" + ("/" + str(primary_list[index].max_ammo) if primary_list[index].get("max_ammo") else "")
+	$PrimaryAmmo.text = str(primary_list[index].ammo) + "/" + str(primary_list[index].max_ammo) if (primary_list[index].get("ammo") != null) else ""
 
 func select_secondary(index):
 	secondary_list[current_secondary_index].state = 0
@@ -53,28 +53,35 @@ func _process(_delta):
 		select_primary(current_primary_index + 1 if (current_primary_index < len(primary_list) - 1) else 0)
 	if Input.is_action_just_released("primary_prev"):
 		select_primary(current_primary_index - 1 if (current_primary_index > 0) else (len(primary_list) - 1))
-	if primary_list[current_primary_index].get("crosshair_distance"): #primary is a gun
-		var rot = primary_list[current_primary_index].crosshair_rotation
-		$PrimaryCrosshairs.translation = primary_list[current_primary_index].crosshair_ray.global_translation + Vector3(
-				sin(deg2rad(rot.y)) * cos(deg2rad(rot.x)),
-				sin(deg2rad(rot.x)),
-				cos(deg2rad(rot.y)) * cos(deg2rad(rot.x))
-			) * primary_list[current_primary_index].crosshair_distance
-	else:
-		$PrimaryCrosshairs.translation = primary_list[current_primary_index].crosshair_ray.global_translation
-	$PrimaryCrosshairs.translation = primary_list[current_primary_index].crosshair_ray.global_translation
 	if Input.is_action_just_released("switch_secondary"):
 		select_secondary(current_secondary_index + 1 if (current_secondary_index < len(secondary_list) - 1) else 0)
+	
+	$PrimaryCrosshairs.translation = primary_list[current_primary_index].crosshair_ray.global_translation
+	$PrimaryCrosshairs.look_at(
+		primary_list[current_primary_index].crosshair_collision,
+		Vector3.UP
+	)
+	$PrimaryCrosshairs.translate(
+		Vector3.FORWARD * primary_list[current_primary_index].crosshair_distance
+	)
+	$SecondaryCrosshairs.translation = secondary_list[current_secondary_index].crosshair_ray.global_translation
+	$SecondaryCrosshairs.look_at(
+		secondary_list[current_secondary_index].crosshair_collision,
+		Vector3.UP
+	)
+	$SecondaryCrosshairs.translate(
+		Vector3.FORWARD * secondary_list[current_secondary_index].crosshair_distance
+	)
 
 func set_accuracy_size(value):
-	$Wall/Accuracy.scale.x = value
-	$Wall/Accuracy.scale.z = value
+	$Accuracy.scale.x = value
+	$Accuracy.scale.z = value
 
 func _on_Revolver_fire_weapon(ammo, accuracy):
 	$PrimaryAmmo.text = str(ammo) + "/6"
 	create_revolver_bullet(
 		$Weapons_Primary/Revolver/BulletFirePosition.global_translation,
-		$Weapons_Primary/Revolver/BulletFirePosition.global_rotation,
+		$Weapons_Primary.rotation,
 		accuracy
 	)
 	set_accuracy_size(1-accuracy)
@@ -90,12 +97,14 @@ func create_revolver_bullet(start:Vector3, rot:Vector3, acc:float):
 	var newBullet = RevolverBullet.instance()
 	add_child(newBullet)
 	newBullet.translation = start
-	newBullet.rotation = rot
+	newBullet.rotate_y(rot.y)
+	newBullet.rotate_x(rot.x)
 	newBullet.rotation += Vector3(
 		rand_range(0,1-acc),
 		rand_range(0,1-acc),
 		rand_range(0,1-acc)
 	)
+	newBullet.act = 1
 
 func _on_Revolver_reload_weapon(ammo):
 	$PrimaryAmmo.text = str(ammo) + "/6"
@@ -105,12 +114,14 @@ func create_shotgun_shell(start:Vector3, rot:Vector3, acc:float):
 	var newBullet = ShotgunShell.instance()
 	add_child(newBullet)
 	newBullet.translation = start
-	newBullet.rotation = rot
+	newBullet.rotate_y(rot.y)
+	newBullet.rotate_x(rot.x)
 	newBullet.rotation += Vector3(
 		rand_range(0,1-acc),
 		rand_range(0,1-acc),
 		rand_range(0,1-acc)
 	)
+	newBullet.act = 1
 
 func create_shotgun_blast(start:Vector3, rot:Vector3, acc:float):
 	for _n in range(8):
@@ -135,15 +146,17 @@ func _on_Shotgun_reload_weapon(ammo):
 	$PrimaryAmmo.text = str(ammo) + "/2"
 	set_accuracy_size(0)
 
-func _on_Coin_fire_weapon(ammo, accuracy):
+func _on_Coin_fire_weapon(ammo, _accuracy):
 	$SecondaryAmmo.text = str(ammo) + "/4"
 	var newCoin = CoinProjectile.instance()
 	add_child(newCoin)
-	newCoin.translation = $Weapons_Secondary/Coin/CoinFireLocation.global_translation
-	newCoin.rotation = $Weapons_Secondary/Coin/CoinFireLocation.global_rotation
+	newCoin.translation = $Weapons_Secondary/Coin/BulletFirePosition.global_translation
+	newCoin.look_at($Weapons_Secondary/Coin/CoinAimAngle.global_translation * COIN_SPEED, Vector3.UP)
+	newCoin.linear_velocity = Vector3(0,newCoin.rotation.y,-newCoin.rotation.x) * COIN_SPEED
+	#newCoin.rotation = $Weapons_Secondary.rotation
 
 func _on_Coin_reload_weapon(ammo):
 	$SecondaryAmmo.text = str(ammo) + "/4"
 
 func _on_Fist_swing_weapon(from, to):
-	print("Fist wants to make hitbox from", from, "to", to)
+	print("Fist wants to make hitbox from ", from, " to ", to)

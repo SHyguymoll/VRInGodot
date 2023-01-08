@@ -7,5 +7,5 @@ func switch_crosshairs(ind: int):
 	get_children()[ind].show()
 	current = ind
 
-func _process(delta):
+func _process(_delta):
 	pass
