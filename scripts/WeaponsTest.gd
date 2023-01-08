@@ -53,7 +53,16 @@ func _process(_delta):
 		select_primary(current_primary_index + 1 if (current_primary_index < len(primary_list) - 1) else 0)
 	if Input.is_action_just_released("primary_prev"):
 		select_primary(current_primary_index - 1 if (current_primary_index > 0) else (len(primary_list) - 1))
-	$PrimaryCrosshairs.translation = primary_list[current_primary_index].crosshair_location if primary_list[current_primary_index].get("crosshair_location") else Vector3(0,0,0)
+	if primary_list[current_primary_index].get("crosshair_distance"): #primary is a gun
+		var rot = primary_list[current_primary_index].crosshair_rotation
+		$PrimaryCrosshairs.translation = primary_list[current_primary_index].crosshair_ray.global_translation + Vector3(
+				sin(deg2rad(rot.y)) * cos(deg2rad(rot.x)),
+				sin(deg2rad(rot.x)),
+				cos(deg2rad(rot.y)) * cos(deg2rad(rot.x))
+			) * primary_list[current_primary_index].crosshair_distance
+	else:
+		$PrimaryCrosshairs.translation = primary_list[current_primary_index].crosshair_ray.global_translation
+	$PrimaryCrosshairs.translation = primary_list[current_primary_index].crosshair_ray.global_translation
 	if Input.is_action_just_released("switch_secondary"):
 		select_secondary(current_secondary_index + 1 if (current_secondary_index < len(secondary_list) - 1) else 0)
 

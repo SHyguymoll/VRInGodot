@@ -85,7 +85,7 @@ func _process(_delta):
 func make_bullet(accuracy: float, cost: int):
 	ammo -= cost
 	emit_signal("fire_weapon", ammo, accuracy)
-	print("firing", ("last" if ammo < 1 else ""), "bullet from", weapon_name ,"with", accuracy, " accuracy!")
+	print("firing ", ("last " if ammo < 1 else ""), "bullet from ", weapon_name ," with ", accuracy, " accuracy!")
 
 
 func _on_ReloadTimer_timeout():

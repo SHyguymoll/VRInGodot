@@ -24,7 +24,8 @@ onready var crosshair_ray = $BulletFirePosition
 var fire_button = ""
 var reload_button = ""
 var current_accuracy = 0.0
-var crosshair_location = Vector3(0,0,0)
+var crosshair_distance = 0.0
+var crosshair_rotation = Vector3(0,0,0)
 
 enum states {
 	DISABLED, #always 0
@@ -61,7 +62,8 @@ func _process(delta):
 			model.show()
 			animations.play("Idle")
 			var test_col = crosshair_ray.get_collision_point()
-			crosshair_location = test_col if crosshair_ray.is_colliding() else Vector3(0,0,-10)
+			crosshair_distance = crosshair_ray.global_translation.distance_to(test_col) if crosshair_ray.is_colliding() else Vector3(0,0,-10)
+			crosshair_rotation = crosshair_ray.global_rotation
 			if ammo < 1:
 				reload_routine()
 			if Input.is_action_pressed(fire_button):

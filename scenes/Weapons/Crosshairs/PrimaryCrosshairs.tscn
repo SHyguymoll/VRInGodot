@@ -36,13 +36,16 @@ material = SubResource( 11 )
 script = ExtResource( 2 )
 
 [node name="Nothing" type="MeshInstance" parent="."]
+visible = false
 mesh = SubResource( 13 )
 skeleton = NodePath("")
 
 [node name="Revolver" type="MeshInstance" parent="."]
+visible = false
 mesh = SubResource( 10 )
 skeleton = NodePath("")
 
 [node name="Shotgun" type="MeshInstance" parent="."]
+visible = false
 mesh = SubResource( 12 )
 skeleton = NodePath("")
