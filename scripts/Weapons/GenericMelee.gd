@@ -20,6 +20,7 @@ var reload_button = ""
 var current_velocity = 0.0
 var previous_location = Vector3(0,0,0)
 
+
 enum states {
 	DISABLED, #always 0
 	IDLE,

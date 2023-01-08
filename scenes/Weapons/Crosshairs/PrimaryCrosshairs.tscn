@@ -37,12 +37,12 @@ script = ExtResource( 2 )
 
 [node name="Nothing" type="MeshInstance" parent="."]
 mesh = SubResource( 13 )
-skeleton = NodePath("../BulletFirePosition")
+skeleton = NodePath("")
 
 [node name="Revolver" type="MeshInstance" parent="."]
 mesh = SubResource( 10 )
-skeleton = NodePath("../BulletFirePosition")
+skeleton = NodePath("")
 
 [node name="Shotgun" type="MeshInstance" parent="."]
 mesh = SubResource( 12 )
-skeleton = NodePath("../BulletFirePosition")
+skeleton = NodePath("")
