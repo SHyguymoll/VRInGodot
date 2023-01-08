@@ -21,10 +21,10 @@ onready var animations = $Animations
 onready var fire_sound = $FireSound
 onready var model = $Model
 onready var crosshair_ray = $BulletFirePosition
-onready var crosshair = $BulletFirePosition/Crosshair
 var fire_button = ""
 var reload_button = ""
 var current_accuracy = 0.0
+var crosshair_location = Vector3(0,0,0)
 
 enum states {
 	DISABLED, #always 0
@@ -60,9 +60,8 @@ func _process(delta):
 		states.IDLE:
 			model.show()
 			animations.play("Idle")
-			crosshair.show()
-			var test_col = crosshair_ray.get_collider()
-			crosshair.translation = test_col.global_translation if test_col != null else Vector3(0,0,-10)
+			var test_col = crosshair_ray.get_collision_point()
+			crosshair_location = test_col if crosshair_ray.is_colliding() else Vector3(0,0,-10)
 			if ammo < 1:
 				reload_routine()
 			if Input.is_action_pressed(fire_button):

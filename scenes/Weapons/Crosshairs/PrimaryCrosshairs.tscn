@@ -1,0 +1,48 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://sprites/ShotgunCrosshair.png" type="Texture" id=1]
+[ext_resource path="res://scripts/Crosshair.gd" type="Script" id=2]
+[ext_resource path="res://sprites/RevolverCrosshair.png" type="Texture" id=3]
+[ext_resource path="res://sprites/NothingCrosshair.png" type="Texture" id=4]
+
+[sub_resource type="SpatialMaterial" id=9]
+flags_transparent = true
+flags_unshaded = true
+params_billboard_mode = 1
+albedo_texture = ExtResource( 4 )
+
+[sub_resource type="QuadMesh" id=13]
+material = SubResource( 9 )
+
+[sub_resource type="SpatialMaterial" id=14]
+flags_transparent = true
+flags_unshaded = true
+params_billboard_mode = 1
+albedo_texture = ExtResource( 3 )
+
+[sub_resource type="QuadMesh" id=10]
+material = SubResource( 14 )
+
+[sub_resource type="SpatialMaterial" id=11]
+flags_transparent = true
+flags_unshaded = true
+params_billboard_mode = 1
+albedo_texture = ExtResource( 1 )
+
+[sub_resource type="QuadMesh" id=12]
+material = SubResource( 11 )
+
+[node name="PrimaryCrosshairs" type="Spatial"]
+script = ExtResource( 2 )
+
+[node name="Nothing" type="MeshInstance" parent="."]
+mesh = SubResource( 13 )
+skeleton = NodePath("../BulletFirePosition")
+
+[node name="Revolver" type="MeshInstance" parent="."]
+mesh = SubResource( 10 )
+skeleton = NodePath("../BulletFirePosition")
+
+[node name="Shotgun" type="MeshInstance" parent="."]
+mesh = SubResource( 12 )
+skeleton = NodePath("../BulletFirePosition")

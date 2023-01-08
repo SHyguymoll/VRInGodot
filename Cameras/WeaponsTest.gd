@@ -36,23 +36,24 @@ func select_primary(index):
 	primary_list[current_primary_index].state = 0
 	primary_list[index].state = 1 #states.IDLE, might add states.EQUIP or something later
 	current_primary_index = index
-	$PrimaryCrosshairs.switch_crosshairs(index)
 	$PrimaryName.text = primary_list[index].weapon_name
-	$PrimaryAmmo.text = str(primary_list[index].ammo) if primary_list[index].get("ammo") else "" + ("/" + str(primary_list[index].max_ammo) if primary_list[index].get("max_ammo") else "")
+	$PrimaryAmmo.text = str(primary_list[index].ammo) + "/" + str(primary_list[index].max_ammo)
 
 func select_secondary(index):
 	secondary_list[current_secondary_index].state = 0
 	secondary_list[index].state = 1 #states.IDLE, might add states.EQUIP or something later
 	current_secondary_index = index
 	$SecondaryName.text = secondary_list[index].weapon_name
-	$SecondaryAmmo.text = str(secondary_list[index].ammo) if secondary_list[index].get("ammo") else "" + ("/" + str(secondary_list[index].max_ammo) if secondary_list[index].get("max_ammo") else "")
+	$SecondaryAmmo.text = str(secondary_list[index].ammo) + "/" + str(secondary_list[index].max_ammo)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if Input.is_action_just_released("primary_next"):
 		select_primary(current_primary_index + 1 if (current_primary_index < len(primary_list) - 1) else 0)
+		$Crosshairs.switch_crosshairs(current_primary_index)
 	if Input.is_action_just_released("primary_prev"):
 		select_primary(current_primary_index - 1 if (current_primary_index > 0) else (len(primary_list) - 1))
+		$Crosshairs.switch_crosshairs(current_primary_index)
 
 func set_accuracy_size(value):
 	$Wall/Accuracy.scale.x = value
@@ -68,11 +69,9 @@ func _on_Revolver_fire_weapon(ammo, accuracy):
 	set_accuracy_size(1-accuracy)
 
 func make_particle(position:Vector3, type:int):
-	match type:
-		0:
-			var newParticle = ParticleCollision.instance()
-			add_child(newParticle)
-			newParticle.translation = position
+	var newParticle = ParticleCollision.instance()
+	add_child(newParticle)
+	newParticle.translation = position
 
 func create_revolver_bullet(start:Vector3, rot:Vector3, acc:float):
 	var newBullet = RevolverBullet.instance()
@@ -85,25 +84,21 @@ func create_revolver_bullet(start:Vector3, rot:Vector3, acc:float):
 		rand_range(0,1-acc)
 	)
 
+func create_shotgun_blast(start:Vector3, rot:Vector3, acc:float):
+	for n in range(8):
+		var newBullet = ShotgunShell.instance()
+		add_child(newBullet)
+		newBullet.translation = start
+		newBullet.rotation = rot
+		newBullet.rotation += Vector3(
+			rand_range(0,1-acc),
+			rand_range(0,1-acc),
+			rand_range(0,1-acc)
+		)
+
 func _on_Revolver_reload_weapon(ammo):
 	$PrimaryAmmo.text = str(ammo) + "/6"
 	set_accuracy_size(0)
-
-func create_shotgun_shell(start:Vector3, rot:Vector3, acc:float):
-	var newBullet = ShotgunShell.instance()
-	add_child(newBullet)
-	newBullet.translation = start
-	newBullet.rotation = rot
-	newBullet.rotation += Vector3(
-		rand_range(0,1-acc),
-		rand_range(0,1-acc),
-		rand_range(0,1-acc)
-	)
-
-func create_shotgun_blast(start:Vector3, rot:Vector3, acc:float):
-	for _n in range(8):
-		create_shotgun_shell(start, rot, acc)
-
 
 func _on_Shotgun_fire_weapon(ammo, accuracy):
 	$PrimaryAmmo.text = str(ammo) + "/2"
@@ -132,6 +127,3 @@ func _on_Coin_fire_weapon(ammo, accuracy):
 
 func _on_Coin_reload_weapon(ammo):
 	$SecondaryAmmo.text = str(ammo) + "/4"
-
-func _on_Fist_swing_weapon(from, to):
-	print("Fist wants to make hitbox from", from, "to", to)

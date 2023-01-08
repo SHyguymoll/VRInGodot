@@ -1,17 +1,8 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://models/Revolver.obj" type="ArrayMesh" id=1]
 [ext_resource path="res://sounds/RevolverShoot.wav" type="AudioStream" id=2]
-[ext_resource path="res://scripts/GenericGun.gd" type="Script" id=3]
-[ext_resource path="res://sprites/RevolverCrosshair.png" type="Texture" id=4]
-
-[sub_resource type="SpatialMaterial" id=9]
-flags_transparent = true
-flags_unshaded = true
-albedo_texture = ExtResource( 4 )
-
-[sub_resource type="QuadMesh" id=10]
-material = SubResource( 9 )
+[ext_resource path="res://scripts/Weapons/GenericGun.gd" type="Script" id=3]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Fire"
@@ -111,10 +102,6 @@ accuracy_lerp = 0.4
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.338 )
 enabled = true
 cast_to = Vector3( 0, 0, -1000 )
-collide_with_areas = true
-
-[node name="Crosshair" type="MeshInstance" parent="BulletFirePosition"]
-mesh = SubResource( 10 )
 
 [node name="Model" type="MeshInstance" parent="."]
 mesh = ExtResource( 1 )
