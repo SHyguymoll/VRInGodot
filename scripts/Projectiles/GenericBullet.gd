@@ -6,6 +6,8 @@ var col = {}
 var ent
 var col_pos
 var act = 0
+
+export var damage: float
 export var bullet_type: int
 
 func _on_LifeTimer_timeout():

@@ -23,6 +23,7 @@ height = 1000.0
 collision_layer = 93
 collision_mask = 0
 script = ExtResource( 2 )
+damage = 1.0
 bullet_type = 1
 
 [node name="Model" type="MeshInstance" parent="."]

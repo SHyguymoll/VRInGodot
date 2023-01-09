@@ -73,19 +73,6 @@ func _process(_delta):
 		Vector3.FORWARD * secondary_list[current_secondary_index].crosshair_distance
 	)
 
-func set_accuracy_size(value):
-	$Accuracy.scale.x = value
-	$Accuracy.scale.z = value
-
-func _on_Revolver_fire_weapon(ammo, accuracy):
-	$PrimaryAmmo.text = str(ammo) + "/6"
-	create_revolver_bullet(
-		$Weapons_Primary/Revolver/BulletFirePosition.global_translation,
-		$Weapons_Primary.rotation,
-		accuracy
-	)
-	set_accuracy_size(1-accuracy)
-
 func make_particle(position:Vector3, type:int):
 	match type:
 		0:
@@ -93,29 +80,35 @@ func make_particle(position:Vector3, type:int):
 			add_child(newParticle)
 			newParticle.translation = position
 
-func create_revolver_bullet(start:Vector3, rot:Vector3, acc:float):
-	var newBullet = RevolverBullet.instance()
+func create_bullet(bullet_scene: PackedScene, start:Vector3, rot:Vector3, acc:float):
+	var newBullet = bullet_scene.instance()
 	add_child(newBullet)
 	newBullet.translation = start
 	newBullet.rotate_x(rot.x + rand_range(-1+acc,1-acc))
 	newBullet.rotate_y(rot.y + rand_range(-1+acc,1-acc))
+	newBullet.rotate_z(rot.z + rand_range(-1+acc,1-acc))
 	newBullet.act = 1
+
+func set_accuracy_size(value):
+	$Accuracy.scale.x = value
+	$Accuracy.scale.z = value
+
+func _on_Revolver_fire_weapon(ammo, accuracy):
+	$PrimaryAmmo.text = str(ammo) + "/6"
+	create_bullet(
+		RevolverBullet,
+		$Weapons_Primary/Revolver/BulletFirePosition.global_translation,
+		$Weapons_Primary.rotation,
+		accuracy)
+	set_accuracy_size(1-accuracy)
 
 func _on_Revolver_reload_weapon(ammo):
 	$PrimaryAmmo.text = str(ammo) + "/6"
 	set_accuracy_size(0)
 
-func create_shotgun_shell(start:Vector3, rot:Vector3, acc:float):
-	var newBullet = ShotgunShell.instance()
-	add_child(newBullet)
-	newBullet.translation = start
-	newBullet.rotate_x(rot.x + rand_range(-1+acc,1-acc))
-	newBullet.rotate_y(rot.y + rand_range(-1+acc,1-acc))
-	newBullet.act = 1
-
 func create_shotgun_blast(start:Vector3, rot:Vector3, acc:float):
 	for _n in range(8):
-		create_shotgun_shell(start, rot, acc)
+		create_bullet(ShotgunShell, start, rot, acc)
 
 func _on_Shotgun_fire_weapon(ammo, accuracy):
 	$PrimaryAmmo.text = str(ammo) + "/2"
@@ -143,11 +136,12 @@ func _on_Coin_fire_weapon(ammo, _accuracy):
 	var dir = ($Weapons_Secondary/Coin/CoinAimAngle.global_translation - newCoin.global_translation).normalized()
 	newCoin.apply_central_impulse(dir * COIN_SPEED)
 
+func coin_bullet_rebound(start: Vector3, end: Vector3):
+	create_bullet(RevolverBullet, start, (end - start).normalized(), 1.0)
+
 func _on_Coin_reload_weapon(ammo):
 	$SecondaryAmmo.text = str(ammo) + "/4"
 
 func _on_Fist_swing_weapon(from, to):
 	print("Fist wants to make hitbox from ", from, " to ", to)
 
-func coin_bullet_rebound(start: Vector3, end: Vector3):
-	create_revolver_bullet(start, end - start, 1.0)

@@ -64,7 +64,6 @@ mesh = SubResource( 1 )
 skeleton = NodePath("../..")
 
 [node name="StaticBody" type="StaticBody" parent="WorldStaticMeshes/Wall"]
-collision_layer = 63
 collision_mask = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="WorldStaticMeshes/Wall/StaticBody"]
@@ -76,7 +75,6 @@ mesh = SubResource( 1 )
 skeleton = NodePath("../..")
 
 [node name="StaticBody" type="StaticBody" parent="WorldStaticMeshes/Plane"]
-collision_layer = 63
 collision_mask = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="WorldStaticMeshes/Plane/StaticBody"]
@@ -88,7 +86,6 @@ mesh = SubResource( 1 )
 skeleton = NodePath("../..")
 
 [node name="StaticBody" type="StaticBody" parent="WorldStaticMeshes/BackWall"]
-collision_layer = 63
 collision_mask = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="WorldStaticMeshes/BackWall/StaticBody"]

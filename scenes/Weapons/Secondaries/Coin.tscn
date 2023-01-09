@@ -91,7 +91,6 @@ script = ExtResource( 3 )
 weapon_name = "Coin"
 left_hand = true
 ammo = 4
-ammo_change = 1
 reload_time = 3.333
 reload_change = 1
 max_ammo = 4
@@ -101,13 +100,13 @@ accuracy_held = 1.0
 accuracy_lerp = 1.0
 
 [node name="BulletFirePosition" type="RayCast" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.417657, -0.689414 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.657216, -0.191732 )
 enabled = true
 cast_to = Vector3( 0, 0, -500 )
 collision_mask = 77
 
 [node name="CoinAimAngle" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.977907, -1.35823 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.657216, -1.358 )
 
 [node name="Model" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.890547, -0.454891, 0, 0.454891, 0.890547, 0, 0, 0.27126 )
@@ -130,6 +129,7 @@ anims/Idle = SubResource( 2 )
 
 [node name="Particles" type="Particles" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24405, 0, 0.117412 )
+emitting = false
 amount = 10
 one_shot = true
 explosiveness = 1.0

@@ -38,17 +38,18 @@ height = 0.25
 extents = Vector3( 0.187, 0.187, 0.187 )
 
 [sub_resource type="CapsuleShape" id=8]
-height = 0.950398
+radius = 0.755912
+height = 0.002
 
 [sub_resource type="BoxShape" id=9]
-extents = Vector3( 100, 100, 100 )
+extents = Vector3( 70, 70, 70 )
 
 [node name="Coin" type="RigidBody"]
+collision_layer = 8
 mass = 0.00510204
 script = ExtResource( 2 )
 
 [node name="Model" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, -0.814797, 0.579746, 0, -0.579746, -0.814797, 0, 0, 0 )
 mesh = ExtResource( 3 )
 
 [node name="InactiveTimer" type="Timer" parent="."]
@@ -87,7 +88,7 @@ max_db = 6.0
 shape = SubResource( 7 )
 
 [node name="ShootHitbox" type="Area" parent="."]
-collision_layer = 50
+collision_layer = 18
 collision_mask = 48
 
 [node name="CollisionShape" type="CollisionShape" parent="ShootHitbox"]
