@@ -21,7 +21,10 @@ radius = 0.0738868
 height = 1000.0
 
 [node name="ShotgunShell" type="Area"]
+collision_layer = 85
+collision_mask = 0
 script = ExtResource( 2 )
+bullet_type = 2
 
 [node name="Model" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -500 )

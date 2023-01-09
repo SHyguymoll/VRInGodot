@@ -7,7 +7,7 @@ export (PackedScene) var GrenadeProjectile
 
 export (PackedScene) var ParticleCollision
 
-const COIN_SPEED = 15
+const COIN_SPEED = 0.1
 
 var primary_list
 var secondary_list
@@ -97,14 +97,8 @@ func create_revolver_bullet(start:Vector3, rot:Vector3, acc:float):
 	var newBullet = RevolverBullet.instance()
 	add_child(newBullet)
 	newBullet.translation = start
-	
-	newBullet.rotate_x(rot.x)
-	newBullet.rotate_y(rot.y)
-	newBullet.rotation += Vector3(
-		rand_range(0,1-acc),
-		rand_range(0,1-acc),
-		rand_range(0,1-acc)
-	)
+	newBullet.rotate_x(rot.x + rand_range(-1+acc,1-acc))
+	newBullet.rotate_y(rot.y + rand_range(-1+acc,1-acc))
 	newBullet.act = 1
 
 func _on_Revolver_reload_weapon(ammo):
@@ -115,8 +109,8 @@ func create_shotgun_shell(start:Vector3, rot:Vector3, acc:float):
 	var newBullet = ShotgunShell.instance()
 	add_child(newBullet)
 	newBullet.translation = start
-	newBullet.rotate_y(rot.y + rand_range(-1+acc,1-acc))
 	newBullet.rotate_x(rot.x + rand_range(-1+acc,1-acc))
+	newBullet.rotate_y(rot.y + rand_range(-1+acc,1-acc))
 	newBullet.act = 1
 
 func create_shotgun_blast(start:Vector3, rot:Vector3, acc:float):
@@ -146,9 +140,8 @@ func _on_Coin_fire_weapon(ammo, _accuracy):
 	var newCoin = CoinProjectile.instance()
 	add_child(newCoin)
 	newCoin.translation = $Weapons_Secondary/Coin/BulletFirePosition.global_translation
-	newCoin.look_at($Weapons_Secondary/Coin/CoinAimAngle.global_translation * COIN_SPEED, Vector3.UP)
-	newCoin.linear_velocity = Vector3(0,newCoin.rotation.y,-newCoin.rotation.x) * COIN_SPEED
-	#newCoin.rotation = $Weapons_Secondary.rotation
+	var dir = ($Weapons_Secondary/Coin/CoinAimAngle.global_translation - newCoin.global_translation).normalized()
+	newCoin.apply_central_impulse(dir * COIN_SPEED)
 
 func _on_Coin_reload_weapon(ammo):
 	$SecondaryAmmo.text = str(ammo) + "/4"

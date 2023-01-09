@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://models/Coin.obj" type="ArrayMesh" id=1]
 [ext_resource path="res://sounds/CoinToss.wav" type="AudioStream" id=2]
@@ -52,6 +52,13 @@ tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0.5, 1, 0, -0.0178281, 0.00393152, 0.0147475, 0, 0, 0.999891, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
 
+[sub_resource type="Gradient" id=9]
+colors = PoolColorArray( 1, 1, 1, 0.298039, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=10]
+gradient = SubResource( 9 )
+width = 4
+
 [sub_resource type="ParticlesMaterial" id=3]
 direction = Vector3( 0, 1, 0 )
 spread = 24.55
@@ -64,6 +71,7 @@ tangential_accel = 45.45
 angle_random = 1.0
 scale = 0.25
 scale_random = 1.0
+color_ramp = SubResource( 10 )
 hue_variation = -1.0
 
 [sub_resource type="SpatialMaterial" id=7]
@@ -95,7 +103,8 @@ accuracy_lerp = 1.0
 [node name="BulletFirePosition" type="RayCast" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.417657, -0.689414 )
 enabled = true
-cast_to = Vector3( 0, 0, -5 )
+cast_to = Vector3( 0, 0, -500 )
+collision_mask = 77
 
 [node name="CoinAimAngle" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.977907, -1.35823 )
@@ -121,9 +130,7 @@ anims/Idle = SubResource( 2 )
 
 [node name="Particles" type="Particles" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24405, 0, 0.117412 )
-emitting = false
 amount = 10
-lifetime = 0.67
 one_shot = true
 explosiveness = 1.0
 fract_delta = false

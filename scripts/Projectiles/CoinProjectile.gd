@@ -18,11 +18,12 @@ func _on_LifeTimer_timeout():
 	queue_free()
 
 func calculate_rebound(surrounding_areas, surrounding_bodies):
-	print("it should rebound here")
+	print(surrounding_areas)
+	print(surrounding_bodies)
 	return Vector3(0,4,-16)
 
 func _on_ShootHitbox_area_entered(area):
-	if area.get("is_a_bullet") == true:
+	if area.get("bullet_type") == 1: #revolver bullet
 		emit_signal("coin_rebound", translation, calculate_rebound($Detection.get_overlapping_areas(), $Detection.get_overlapping_bodies()))
 		if super_active:
 			print("split shot")

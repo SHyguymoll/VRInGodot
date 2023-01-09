@@ -106,6 +106,7 @@ accuracy_lerp = 1.0
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.75251 )
 enabled = true
 cast_to = Vector3( 0, 0, -1000 )
+collision_mask = 85
 
 [node name="FirePointA" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.158154, -0.0279849, -1.75422 )

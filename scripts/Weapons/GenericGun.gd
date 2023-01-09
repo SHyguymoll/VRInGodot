@@ -57,13 +57,15 @@ func fire_routine():
 	fire_pause_timer.start()
 
 func _process(_delta):
+	if state != states.DISABLED:
+		var test_col = crosshair_ray.get_collision_point()
+		crosshair_distance = crosshair_ray.global_translation.distance_to(test_col) if crosshair_ray.is_colliding() else -5
+		crosshair_collision = test_col if crosshair_ray.is_colliding() else Vector3(0,0,0)
 	match state:
 		states.IDLE:
 			model.show()
 			animations.play("Idle")
-			var test_col = crosshair_ray.get_collision_point()
-			crosshair_distance = crosshair_ray.global_translation.distance_to(test_col) if crosshair_ray.is_colliding() else -5
-			crosshair_collision = test_col if crosshair_ray.is_colliding() else Vector3(0,0,0)
+			
 			if ammo < 1:
 				reload_routine()
 			if Input.is_action_pressed(fire_button):

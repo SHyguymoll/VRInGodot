@@ -67,7 +67,7 @@ func _process(_delta):
 			animations.play("Idle")
 			var test_col = crosshair_ray.get_collision_point()
 			crosshair_distance = crosshair_ray.global_translation.distance_to(test_col) if crosshair_ray.is_colliding() else -3
-			crosshair_collision = test_col if crosshair_ray.is_colliding() else crosshair_ray.cast_to
+			crosshair_collision = test_col if crosshair_ray.is_colliding() else Vector3.ZERO
 			if ammo < max_ammo:
 				reload_timer.paused = 0
 			else:

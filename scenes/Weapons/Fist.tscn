@@ -49,6 +49,8 @@ minimum_velocity = 10.0
 [node name="BulletFirePosition" type="RayCast" parent="."]
 enabled = true
 cast_to = Vector3( 0, 0, -5 )
+collision_mask = 124
+collide_with_areas = true
 
 [node name="Model" type="MeshInstance" parent="."]
 mesh = ExtResource( 1 )
