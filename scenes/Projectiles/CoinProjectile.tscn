@@ -46,6 +46,7 @@ extents = Vector3( 70, 70, 70 )
 
 [node name="Coin" type="RigidBody"]
 collision_layer = 8
+collision_mask = 65
 mass = 0.00510204
 script = ExtResource( 2 )
 

@@ -48,7 +48,7 @@ minimum_velocity = 10.0
 
 [node name="BulletFirePosition" type="RayCast" parent="."]
 enabled = true
-cast_to = Vector3( 0, 0, -5 )
+cast_to = Vector3( 0, 0, 5 )
 collision_mask = 124
 collide_with_areas = true
 
@@ -64,7 +64,7 @@ root_node = NodePath("../Model")
 anims/Idle = SubResource( 2 )
 
 [node name="SwingTrail" type="Particles" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.896998 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.897 )
 emitting = false
 amount = 10
 lifetime = 0.3
@@ -77,7 +77,7 @@ process_material = SubResource( 3 )
 draw_pass_1 = SubResource( 5 )
 
 [node name="FireSound" type="AudioStreamPlayer3D" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.11867 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.119 )
 stream = ExtResource( 2 )
 unit_db = 8.0
 max_db = 6.0

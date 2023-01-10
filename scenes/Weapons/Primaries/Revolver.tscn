@@ -2,18 +2,18 @@
 
 [ext_resource path="res://models/Revolver.obj" type="ArrayMesh" id=1]
 [ext_resource path="res://sounds/RevolverShoot.wav" type="AudioStream" id=2]
-[ext_resource path="res://scripts/Weapons/GenericGun.gd" type="Script" id=3]
+[ext_resource path="res://scripts/Weapons/GenericHitscan.gd" type="Script" id=3]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Fire"
 length = 0.666
 tracks/0/type = "transform"
 tracks/0/path = NodePath(".")
-tracks/0/interp = 1
+tracks/0/interp = 2
 tracks/0/loop_wrap = false
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0.27126, 0.233937, 0, 0, 0.972252, 1, 1, 1, 0.1, 1, 0, 0.0394472, 0.324828, 0.309067, 0, 0, 0.95104, 1, 1, 1, 0.2, 1, 0, -0.0527714, 0.195248, 0.169599, 0, 0, 0.985513, 1, 1, 1, 0.6, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
+tracks/0/keys = PoolRealArray( 0, 1, 0, 0, -0.458435, -0.338894, 0, 0, 0.940825, 1, 1, 1, 0.1, 1, 0, 0, -0.458435, -0.255868, 0, 0, 0.966712, 1, 1, 1, 0.6, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
 tracks/1/type = "value"
 tracks/1/path = NodePath("../Particles:emitting")
 tracks/1/interp = 1
@@ -92,6 +92,8 @@ script = ExtResource( 3 )
 weapon_name = "Revolver"
 ammo = 6
 ammo_change = 1
+bullets_per_shot = 1
+dmg_per_bullet = 1.0
 reload_time = 1.2
 max_ammo = 6
 fire_break_time = 0.666
@@ -100,9 +102,9 @@ accuracy_held = 0.95
 accuracy_lerp = 0.4
 
 [node name="BulletFirePosition" type="RayCast" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.338 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.338 )
 enabled = true
-cast_to = Vector3( 0, 0, -1000 )
+cast_to = Vector3( 0, 0, 1000 )
 collision_mask = 125
 collide_with_areas = true
 
@@ -120,7 +122,7 @@ anims/Idle = SubResource( 2 )
 anims/Reload = SubResource( 6 )
 
 [node name="Particles" type="Particles" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.26067 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.261 )
 emitting = false
 amount = 10
 lifetime = 0.1
@@ -134,7 +136,7 @@ process_material = SubResource( 3 )
 draw_pass_1 = SubResource( 8 )
 
 [node name="FireSound" type="AudioStreamPlayer3D" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.11867 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.119 )
 stream = ExtResource( 2 )
 unit_db = 8.0
 max_db = 6.0

@@ -14,7 +14,7 @@ tracks/0/interp = 1
 tracks/0/loop_wrap = false
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0.27126, 0.233937, 0, 0, 0.972252, 1, 1, 1, 0.2, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
+tracks/0/keys = PoolRealArray( 0, 1, 0, 0, -0.271, -0.234, 0, 0, 0.972, 1, 1, 1, 0.2, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
 tracks/1/type = "value"
 tracks/1/path = NodePath("../Particles:emitting")
 tracks/1/interp = 1
@@ -100,20 +100,19 @@ accuracy_held = 1.0
 accuracy_lerp = 1.0
 
 [node name="BulletFirePosition" type="RayCast" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.657216, -0.191732 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.657, 0.192 )
 enabled = true
-cast_to = Vector3( 0, 0, -500 )
+cast_to = Vector3( 0, 0, 500 )
 collision_mask = 77
 
 [node name="CoinAimAngle" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.657216, -1.358 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.657, 1.358 )
 
 [node name="Model" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.890547, -0.454891, 0, 0.454891, 0.890547, 0, 0, 0.27126 )
 mesh = ExtResource( 1 )
 
 [node name="AmmoCounter" type="Sprite3D" parent="Model"]
-transform = Transform( 1, 0, 0, 0, 0.854694, 0.519131, 0, -0.519131, 0.854694, 0, 0.382908, 0.684499 )
+transform = Transform( 1, 0, 0, 0, 0.854694, -0.519131, 0, 0.519131, 0.854694, 0, 0.383, -0.684 )
 pixel_size = 0.006
 texture = ExtResource( 4 )
 hframes = 5
@@ -128,18 +127,18 @@ anims/Fire = SubResource( 1 )
 anims/Idle = SubResource( 2 )
 
 [node name="Particles" type="Particles" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24405, 0, 0.117412 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.244, 0, -0.117 )
 emitting = false
 amount = 10
 one_shot = true
 explosiveness = 1.0
 fract_delta = false
-visibility_aabb = AABB( -1.58652, -1.316, -1.49013, 3.173, 2.63201, 2.98026 )
+visibility_aabb = AABB( -4.34226, -3.52816, -5.18462, 8.68448, 7.05633, 10.3692 )
 process_material = SubResource( 3 )
 draw_pass_1 = SubResource( 8 )
 
 [node name="FireSound" type="AudioStreamPlayer3D" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.11867 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.119 )
 stream = ExtResource( 2 )
 unit_db = 8.0
 max_db = 6.0

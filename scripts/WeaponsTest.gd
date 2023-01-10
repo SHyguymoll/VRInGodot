@@ -80,47 +80,42 @@ func make_particle(position:Vector3, type:int):
 			add_child(newParticle)
 			newParticle.translation = position
 
-func create_bullet(bullet_scene: PackedScene, start:Vector3, rot:Vector3, acc:float):
-	var newBullet = bullet_scene.instance()
-	add_child(newBullet)
-	newBullet.translation = start
-	newBullet.rotate_x(rot.x + rand_range(-1+acc,1-acc))
-	newBullet.rotate_y(rot.y + rand_range(-1+acc,1-acc))
-	newBullet.rotate_z(rot.z + rand_range(-1+acc,1-acc))
-	newBullet.act = 1
-
 func set_accuracy_size(value):
 	$Accuracy.scale.x = value
 	$Accuracy.scale.z = value
 
-func _on_Revolver_fire_weapon(ammo, accuracy):
+func create_bullet_effect(bullet_scene: PackedScene, start:Vector3, length:float, rot:Vector3):
+	var newBullet = bullet_scene.instance()
+	add_child(newBullet)
+	newBullet.translation = start
+	newBullet.set_length(length)
+	newBullet.global_rotation = rot
+	newBullet.act = 1
+
+func _on_Revolver_fire_weapon(ammo, accuracy, thing_hit, hit_position):
 	$PrimaryAmmo.text = str(ammo) + "/6"
-	create_bullet(
+	var rev_pos = $Weapons_Primary/Revolver/BulletFirePosition.global_translation
+	var rev_rot = $Weapons_Primary/Revolver/BulletFirePosition.global_rotation
+	create_bullet_effect(
 		RevolverBullet,
-		$Weapons_Primary/Revolver/BulletFirePosition.global_translation,
-		$Weapons_Primary.rotation,
-		accuracy)
+		rev_pos,
+		rev_pos.distance_squared_to(hit_position),
+		rev_rot
+	)
 	set_accuracy_size(1-accuracy)
 
 func _on_Revolver_reload_weapon(ammo):
 	$PrimaryAmmo.text = str(ammo) + "/6"
 	set_accuracy_size(0)
 
-func create_shotgun_blast(start:Vector3, rot:Vector3, acc:float):
-	for _n in range(8):
-		create_bullet(ShotgunShell, start, rot, acc)
-
-func _on_Shotgun_fire_weapon(ammo, accuracy):
+func _on_Shotgun_fire_weapon(ammo, accuracy, thing_hit, hit_position):
 	$PrimaryAmmo.text = str(ammo) + "/2"
-	create_shotgun_blast(
-		$Weapons_Primary/Shotgun/FirePointA.global_translation,
-		$Weapons_Primary/Shotgun/FirePointA.global_rotation,
-		accuracy
-	)
-	create_shotgun_blast(
-		$Weapons_Primary/Shotgun/FirePointB.global_translation,
-		$Weapons_Primary/Shotgun/FirePointB.global_rotation,
-		accuracy
+	var pick_side = randi() % 2
+	create_bullet_effect(
+		ShotgunShell,
+		$Weapons_Primary/Shotgun/FirePointA.global_translation if pick_side else $Weapons_Primary/Shotgun/FirePointB.global_translation,
+		$Weapons_Primary/Shotgun/FirePointA.global_translation.distance_squared_to(hit_position) if pick_side else $Weapons_Primary/Shotgun/FirePointB.global_translation.distance_squared_to(hit_position),
+		$Weapons_Primary/Shotgun/BulletFirePosition.global_rotation
 	)
 	set_accuracy_size(1-accuracy)
 
@@ -136,8 +131,8 @@ func _on_Coin_fire_weapon(ammo, _accuracy):
 	var dir = ($Weapons_Secondary/Coin/CoinAimAngle.global_translation - newCoin.global_translation).normalized()
 	newCoin.apply_central_impulse(dir * COIN_SPEED)
 
-func coin_bullet_rebound(start: Vector3, end: Vector3):
-	create_bullet(RevolverBullet, start, (end - start).normalized(), 1.0)
+#func coin_bullet_rebound(start: Vector3, end: Vector3):
+#	create_bullet(RevolverBullet, start, (end - start).normalized(), 1.0)
 
 func _on_Coin_reload_weapon(ammo):
 	$SecondaryAmmo.text = str(ammo) + "/4"

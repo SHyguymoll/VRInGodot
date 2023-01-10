@@ -8,6 +8,7 @@ size = Vector2( 10, 10 )
 [node name="Spatial" type="Spatial"]
 
 [node name="FPController" parent="." instance=ExtResource( 1 )]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
 
 [node name="ARVRCamera" parent="FPController" index="1"]
 far = 1000.0

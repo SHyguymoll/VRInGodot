@@ -1,6 +1,6 @@
 extends Spatial
 
-#The most basic gun. Reloads its entire clip when empty, or when the reload key is pressed.
+#The most basic hitscan gun. Reloads its entire clip when empty, or when the reload key is pressed.
 signal fire_weapon
 signal reload_weapon
 
@@ -8,6 +8,8 @@ export var weapon_name: String
 export var left_hand = false #if in the left hand
 export var ammo: int #current ammo in gun
 export var ammo_change: int #how much ammo is used when firing
+export var bullets_per_shot: int #how many bullets are created when shooting
+export var dmg_per_bullet: float #base damage for a single bullet
 export var reload_time: float #time for reloading
 onready var reload_timer = $ReloadTimer
 export var max_ammo: int #what ammo gets set to after reloading
@@ -53,7 +55,10 @@ func reload_routine():
 
 func fire_routine():
 	animations.play("Fire")
-	make_bullet(current_accuracy, ammo_change)
+	ammo -= ammo_change
+	print("firing " + ("last " if ammo < 1 else "") + "bullet with " + str(current_accuracy) + " accuracy!")
+	for _c in range(bullets_per_shot):
+		make_bullet(current_accuracy)
 	fire_pause_timer.start()
 
 func _process(_delta):
@@ -94,7 +99,22 @@ func _process(_delta):
 		states.DISABLED:
 			model.hide()
 
-func make_bullet(accuracy: float, cost: int):
-	ammo -= cost
-	emit_signal("fire_weapon", ammo, accuracy)
-	print("firing " + ("last " if ammo < 1 else "") + "bullet with " + str(accuracy) + " accuracy!")
+func make_bullet(accuracy: float):
+	var make_inaccurate = [
+		rand_range(-1+accuracy, 1-accuracy),
+		rand_range(-1+accuracy, 1-accuracy),
+		rand_range(-1+accuracy, 1-accuracy)
+	]
+	crosshair_ray.rotate_x(make_inaccurate[0])
+	crosshair_ray.rotate_y(make_inaccurate[1])
+	crosshair_ray.rotate_z(make_inaccurate[2])
+	crosshair_ray.force_raycast_update()
+	
+	if crosshair_ray.is_colliding():
+		emit_signal("fire_weapon", ammo, accuracy, crosshair_ray.get_collider(), crosshair_ray.get_collision_point())
+	else:
+		emit_signal("fire_weapon", ammo, accuracy, null, crosshair_ray.get_collision_point())
+	crosshair_ray.rotate_z(-make_inaccurate[2])
+	crosshair_ray.rotate_y(-make_inaccurate[1])
+	crosshair_ray.rotate_x(-make_inaccurate[0])
+	

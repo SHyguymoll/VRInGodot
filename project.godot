@@ -101,8 +101,8 @@ rotate_secondary={
 3d_physics/layer_2="player"
 3d_physics/layer_3="enemies"
 3d_physics/layer_4="coins"
-3d_physics/layer_5="player bullets"
-3d_physics/layer_6="enemy bullets"
+3d_physics/layer_5="player projectiles"
+3d_physics/layer_6="enemy projectiles"
 3d_physics/layer_7="breakables"
 
 [physics]

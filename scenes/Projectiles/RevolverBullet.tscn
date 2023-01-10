@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://scripts/Projectiles/GenericBullet.gd" type="Script" id=2]
+[ext_resource path="res://scripts/Projectiles/GenericBulletEffect.gd" type="Script" id=2]
 
 [sub_resource type="CapsuleMesh" id=4]
 radius = 0.058
@@ -15,16 +15,8 @@ emission_energy = 10.0
 emission_operator = 0
 emission_on_uv2 = false
 
-[sub_resource type="CapsuleShape" id=7]
-radius = 0.0738868
-height = 1000.0
-
-[node name="RevolverBullet" type="Area"]
-collision_layer = 93
-collision_mask = 0
+[node name="RevolverBullet" type="Spatial"]
 script = ExtResource( 2 )
-damage = 1.0
-bullet_type = 1
 
 [node name="Model" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -500 )
@@ -34,12 +26,5 @@ material/0 = SubResource( 8 )
 [node name="LifeTimer" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
-
-[node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -500 )
-shape = SubResource( 7 )
-
-[node name="BulletFireMax" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1000 )
 
 [connection signal="timeout" from="LifeTimer" to="." method="_on_LifeTimer_timeout"]

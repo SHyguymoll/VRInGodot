@@ -6,8 +6,8 @@ var active = 0
 var split_shot_active = 1
 var ready_to_rebound = 0
 
-func _ready():
-	connect("coin_rebound", $"..", "coin_bullet_rebound")
+#func _ready():
+#	connect("coin_rebound", $"..", "coin_bullet_rebound")
 
 func _physics_process(delta):
 	if ready_to_rebound:
