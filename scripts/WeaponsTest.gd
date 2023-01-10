@@ -8,6 +8,7 @@ export (PackedScene) var GrenadeProjectile
 export (PackedScene) var ParticleCollision
 
 const COIN_SPEED = 0.1
+const SEARCH_DIST = 100
 
 var primary_list
 var secondary_list
@@ -102,6 +103,7 @@ func _on_Revolver_fire_weapon(ammo, accuracy, thing_hit, hit_position):
 		rev_pos.distance_squared_to(hit_position),
 		rev_rot
 	)
+	make_particle(hit_position, 0)
 	set_accuracy_size(1-accuracy)
 
 func _on_Revolver_reload_weapon(ammo):
@@ -131,12 +133,27 @@ func _on_Coin_fire_weapon(ammo, _accuracy):
 	var dir = ($Weapons_Secondary/Coin/CoinAimAngle.global_translation - newCoin.global_translation).normalized()
 	newCoin.apply_central_impulse(dir * COIN_SPEED)
 
-#func coin_bullet_rebound(start: Vector3, end: Vector3):
-#	create_bullet(RevolverBullet, start, (end - start).normalized(), 1.0)
+func coin_bullet_rebound(coin: RigidBody, end, dmg_val: float):
+	if typeof(end) == TYPE_VECTOR3: #no reflect
+		var hopefully_ground = get_world().direct_space_state.intersect_ray(coin.global_translation, coin.global_translation + Vector3.DOWN * SEARCH_DIST, [coin])
+		if len(hopefully_ground) != 0:
+			 create_bullet_effect(
+				RevolverBullet,
+				coin.global_translation,
+				coin.global_translation.distance_squared_to(hopefully_ground.get("position")),
+				coin.global_translation.direction_to(hopefully_ground.get("position"))
+			)
+	else: #this is an area or rigidbody
+		end.handle_damage(dmg_val) #all targetable entities require this function!
+		create_bullet_effect(
+				RevolverBullet,
+				coin.global_translation,
+				coin.global_translation.distance_squared_to(end.global_translation),
+				coin.global_translation.direction_to(end.global_translation)
+			)
 
 func _on_Coin_reload_weapon(ammo):
 	$SecondaryAmmo.text = str(ammo) + "/4"
 
 func _on_Fist_swing_weapon(from, to):
 	print("Fist wants to make hitbox from ", from, " to ", to)
-

@@ -100,8 +100,8 @@ dmg_per_bullet = 0.25
 reload_time = 0.4
 max_ammo = 2
 fire_break_time = 1.0
-accuracy_initial = 0.5
-accuracy_held = 0.5
+accuracy_initial = 0.8
+accuracy_held = 0.8
 accuracy_lerp = 1.0
 
 [node name="BulletFirePosition" type="RayCast" parent="."]
