@@ -5,7 +5,7 @@ export (PackedScene) var RevolverBullet
 export (PackedScene) var ShotgunShell
 export (PackedScene) var GrenadeProjectile
 
-export (PackedScene) var ParticleCollision
+export (Array, PackedScene) var ParticleList
 
 const COIN_SPEED = 0.1
 const SEARCH_DIST = 100
@@ -66,11 +66,9 @@ func _process(_delta):
 	$SecondaryCrosshairs.translation = sec_cross_coll if sec_cross.is_colliding() else sec_cross.to_global(CROSSHAIR_REST)
 
 func make_particle(position:Vector3, type:int):
-	match type:
-		0:
-			var newParticle = ParticleCollision.instance()
-			add_child(newParticle)
-			newParticle.translation = position
+	var newParticle = ParticleList[type].instance()
+	add_child(newParticle)
+	newParticle.translation = position
 
 func set_accuracy_size(value):
 	$Accuracy.scale.x = value
