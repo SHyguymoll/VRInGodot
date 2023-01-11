@@ -87,12 +87,12 @@ func set_accuracy_size(value):
 
 func create_bullet_effect(bullet_scene: PackedScene, start:Vector3, end:Vector3):
 	var length = start.distance_to(end)
-	var rot = start.direction_to(end)
+	#var rot = start.direction_to(end)
 	var newBullet = bullet_scene.instance()
 	add_child(newBullet)
-	newBullet.global_translation = start.linear_interpolate(end, 0.5)
+	newBullet.global_translate(start.linear_interpolate(end, 0.5))
 	newBullet.set_length(length)
-	newBullet.global_rotation = rot
+	newBullet.look_at(end, Vector3.UP)
 
 func _on_Revolver_fire_weapon(ammo, accuracy, thing_hit, hit_position):
 	$PrimaryAmmo.text = str(ammo) + "/6"
@@ -134,7 +134,7 @@ func _on_Coin_fire_weapon(ammo, _accuracy):
 	newCoin.apply_central_impulse(dir * COIN_SPEED)
 
 func coin_bullet_rebound(coin: RigidBody, end, dmg_val: float):
-	if typeof(end) == TYPE_VECTOR3: #no reflect
+	if coin == end: #no reflect
 		var hopefully_ground = get_world().direct_space_state.intersect_ray(coin.global_translation, coin.global_translation + Vector3.DOWN * SEARCH_DIST, [coin])
 		if len(hopefully_ground) != 0:
 			 create_bullet_effect(
@@ -143,7 +143,7 @@ func coin_bullet_rebound(coin: RigidBody, end, dmg_val: float):
 				hopefully_ground.get("position")
 			)
 	else: #this is an area or rigidbody
-		end.handle_damage(dmg_val) #all targetable entities require this function!
+		if end.has_method("handle_damage"): end.handle_damage(dmg_val) #all damagable entities require this function!
 		create_bullet_effect(
 				RevolverBullet,
 				coin.global_translation,

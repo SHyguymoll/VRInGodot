@@ -109,6 +109,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.753 )
 enabled = true
 cast_to = Vector3( 0, 0, 1000 )
 collision_mask = 85
+collide_with_areas = true
 
 [node name="FirePointA" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.158, -0.028, 1.754 )

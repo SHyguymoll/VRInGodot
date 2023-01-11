@@ -34,7 +34,7 @@ func _on_SuperTimer_timeout():
 func _on_LifeTimer_timeout():
 	queue_free()
 
-func calculate_rebound(detects: Array):
+func calculate_rebound(detects: Array) -> Node:
 	global_rotation = Vector3.ZERO
 	print(detects)
 	#remember to ignore the first detected coin (as that is itself) and the first detected bullet (as that is the bullet that hit the coin)
@@ -63,6 +63,6 @@ func calculate_rebound(detects: Array):
 		for try in try_array:
 			if get_world().direct_space_state.intersect_ray(global_translation, try.global_translation, [self]).get("collider") == try: #if the coin can see try, it's valid
 				return try
-	return global_translation #nothing to reflect towards, reflect down
+	return self #nothing to reflect towards (somehow)
 
 
