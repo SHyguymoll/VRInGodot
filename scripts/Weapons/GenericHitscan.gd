@@ -99,22 +99,21 @@ func _process(_delta):
 		states.DISABLED:
 			model.hide()
 
+const ACCURACY_MODIFIER = 750
+
 func make_bullet(accuracy: float):
+	var acc_low = (-1+accuracy)*ACCURACY_MODIFIER
+	var acc_high = (1-accuracy)*ACCURACY_MODIFIER
 	var make_inaccurate = [
-		rand_range(-1+accuracy, 1-accuracy),
-		rand_range(-1+accuracy, 1-accuracy),
-		rand_range(-1+accuracy, 1-accuracy)
+		rand_range(acc_low, acc_high),
+		rand_range(acc_low, acc_high)
 	]
-	crosshair_ray.rotate_x(make_inaccurate[0])
-	crosshair_ray.rotate_y(make_inaccurate[1])
-	crosshair_ray.rotate_z(make_inaccurate[2])
+	crosshair_ray.cast_to.x += make_inaccurate[0]
+	crosshair_ray.cast_to.y += make_inaccurate[1]
 	crosshair_ray.force_raycast_update()
-	
 	if crosshair_ray.is_colliding():
 		emit_signal("fire_weapon", ammo, accuracy, crosshair_ray.get_collider(), crosshair_ray.get_collision_point())
 	else:
 		emit_signal("fire_weapon", ammo, accuracy, null, crosshair_ray.get_collision_point())
-	crosshair_ray.rotate_z(-make_inaccurate[2])
-	crosshair_ray.rotate_y(-make_inaccurate[1])
-	crosshair_ray.rotate_x(-make_inaccurate[0])
-	
+	crosshair_ray.cast_to.y -= make_inaccurate[1]
+	crosshair_ray.cast_to.x -= make_inaccurate[0]

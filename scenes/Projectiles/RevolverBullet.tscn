@@ -3,6 +3,7 @@
 [ext_resource path="res://scripts/Projectiles/GenericBulletEffect.gd" type="Script" id=2]
 
 [sub_resource type="CapsuleMesh" id=4]
+flip_faces = true
 radius = 0.058
 radial_segments = 4
 rings = 2

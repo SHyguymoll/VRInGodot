@@ -43,12 +43,13 @@ func calculate_rebound(detects: Array):
 	var glass = []
 	var other = []
 	for entry in detects:
-		if (
-			entry.get("split_shot_active") != null and
-			entry.global_translation != global_translation and
-			entry.get("ready_to_rebound") == 0
-			): #entry is a different coin, and it hasn't been used already
-			coin.append(entry)
+		if entry.get("split_shot_active") != null: #entry is a coin 
+			if (
+				entry.get("split_shot_active") != null and
+				entry.global_translation != global_translation and
+				entry.get("ready_to_rebound") == 0
+				): #entry is a different coin, and it hasn't been used already
+				coin.append(entry)
 		elif entry.get("enemy_health") != null: #entry is an enemy
 			enemy.append(entry)
 			continue
@@ -64,7 +65,4 @@ func calculate_rebound(detects: Array):
 				return try
 	return global_translation #nothing to reflect towards, reflect down
 
-func _on_ShootHitbox_area_entered(area):
-	print("shot_detected!")
-	if area.get("bullet_type") == 1: #revolver bullet
-		handle_damage(1)
+

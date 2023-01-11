@@ -85,25 +85,26 @@ func set_accuracy_size(value):
 	$Accuracy.scale.x = value
 	$Accuracy.scale.z = value
 
-func create_bullet_effect(bullet_scene: PackedScene, start:Vector3, length:float, rot:Vector3):
+func create_bullet_effect(bullet_scene: PackedScene, start:Vector3, end:Vector3):
+	var length = start.distance_to(end)
+	var rot = start.direction_to(end)
 	var newBullet = bullet_scene.instance()
 	add_child(newBullet)
-	newBullet.translation = start
+	newBullet.global_translation = start.linear_interpolate(end, 0.5)
 	newBullet.set_length(length)
 	newBullet.global_rotation = rot
-	newBullet.act = 1
 
 func _on_Revolver_fire_weapon(ammo, accuracy, thing_hit, hit_position):
 	$PrimaryAmmo.text = str(ammo) + "/6"
 	var rev_pos = $Weapons_Primary/Revolver/BulletFirePosition.global_translation
-	var rev_rot = $Weapons_Primary/Revolver/BulletFirePosition.global_rotation
 	create_bullet_effect(
 		RevolverBullet,
 		rev_pos,
-		rev_pos.distance_squared_to(hit_position),
-		rev_rot
+		hit_position
 	)
 	make_particle(hit_position, 0)
+	if thing_hit != null and thing_hit.has_method("handle_damage"):
+		thing_hit.handle_damage(1)
 	set_accuracy_size(1-accuracy)
 
 func _on_Revolver_reload_weapon(ammo):
@@ -116,8 +117,7 @@ func _on_Shotgun_fire_weapon(ammo, accuracy, thing_hit, hit_position):
 	create_bullet_effect(
 		ShotgunShell,
 		$Weapons_Primary/Shotgun/FirePointA.global_translation if pick_side else $Weapons_Primary/Shotgun/FirePointB.global_translation,
-		$Weapons_Primary/Shotgun/FirePointA.global_translation.distance_squared_to(hit_position) if pick_side else $Weapons_Primary/Shotgun/FirePointB.global_translation.distance_squared_to(hit_position),
-		$Weapons_Primary/Shotgun/BulletFirePosition.global_rotation
+		hit_position
 	)
 	set_accuracy_size(1-accuracy)
 
@@ -140,16 +140,14 @@ func coin_bullet_rebound(coin: RigidBody, end, dmg_val: float):
 			 create_bullet_effect(
 				RevolverBullet,
 				coin.global_translation,
-				coin.global_translation.distance_squared_to(hopefully_ground.get("position")),
-				coin.global_translation.direction_to(hopefully_ground.get("position"))
+				hopefully_ground.get("position")
 			)
 	else: #this is an area or rigidbody
 		end.handle_damage(dmg_val) #all targetable entities require this function!
 		create_bullet_effect(
 				RevolverBullet,
 				coin.global_translation,
-				coin.global_translation.distance_squared_to(end.global_translation),
-				coin.global_translation.direction_to(end.global_translation)
+				end.global_translation
 			)
 
 func _on_Coin_reload_weapon(ammo):

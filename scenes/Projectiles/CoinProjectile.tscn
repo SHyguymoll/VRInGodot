@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://sounds/CoinToss.wav" type="AudioStream" id=1]
 [ext_resource path="res://scripts/Projectiles/CoinProjectile.gd" type="Script" id=2]
 [ext_resource path="res://models/CoinProjectile.obj" type="ArrayMesh" id=3]
+[ext_resource path="res://scripts/Projectiles/Coin/CoinShot.gd" type="Script" id=4]
 
 [sub_resource type="Animation" id=6]
 resource_name = "Spin"
@@ -91,6 +92,7 @@ shape = SubResource( 7 )
 [node name="ShootHitbox" type="Area" parent="."]
 collision_layer = 18
 collision_mask = 48
+script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="ShootHitbox"]
 shape = SubResource( 8 )
