@@ -127,6 +127,6 @@ func make_bullet(accuracy: float):
 			ammo,
 			accuracy,
 			null,
-			crosshair_ray.to_global(crosshair_ray.cast_to)
+			crosshair_ray.to_global(crosshair_ray.cast_to.rotated(Vector3.LEFT, make_inaccurate[0]).rotated(Vector3.UP, make_inaccurate[1]))
 		)
 	

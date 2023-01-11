@@ -9,6 +9,7 @@ export (PackedScene) var ParticleCollision
 
 const COIN_SPEED = 0.1
 const SEARCH_DIST = 100
+const CROSSHAIR_REST = Vector3(0,0,5)
 
 var primary_list
 var secondary_list
@@ -57,22 +58,12 @@ func _process(_delta):
 	if Input.is_action_just_released("switch_secondary"):
 		select_secondary(current_secondary_index + 1 if (current_secondary_index < len(secondary_list) - 1) else 0)
 	
-	$PrimaryCrosshairs.translation = primary_list[current_primary_index].crosshair_ray.global_translation
-	$PrimaryCrosshairs.look_at(
-		primary_list[current_primary_index].crosshair_collision,
-		Vector3.UP
-	)
-	$PrimaryCrosshairs.translate(
-		Vector3.FORWARD * primary_list[current_primary_index].crosshair_distance
-	)
-	$SecondaryCrosshairs.translation = secondary_list[current_secondary_index].crosshair_ray.global_translation
-	$SecondaryCrosshairs.look_at(
-		secondary_list[current_secondary_index].crosshair_collision,
-		Vector3.UP
-	)
-	$SecondaryCrosshairs.translate(
-		Vector3.FORWARD * secondary_list[current_secondary_index].crosshair_distance
-	)
+	var prime_cross = primary_list[current_primary_index].crosshair_ray
+	var prime_cross_coll = primary_list[current_primary_index].crosshair_collision
+	$PrimaryCrosshairs.translation = prime_cross_coll if prime_cross.is_colliding() else prime_cross.to_global(CROSSHAIR_REST)
+	var sec_cross = secondary_list[current_secondary_index].crosshair_ray
+	var sec_cross_coll = secondary_list[current_secondary_index].crosshair_collision
+	$SecondaryCrosshairs.translation = sec_cross_coll if sec_cross.is_colliding() else sec_cross.to_global(CROSSHAIR_REST)
 
 func make_particle(position:Vector3, type:int):
 	match type:
@@ -113,10 +104,9 @@ func _on_Revolver_reload_weapon(ammo):
 
 func _on_Shotgun_fire_weapon(ammo, accuracy, thing_hit, hit_position):
 	$PrimaryAmmo.text = str(ammo) + "/2"
-	var pick_side = randi() % 2
 	create_bullet_effect(
 		ShotgunShell,
-		$Weapons_Primary/Shotgun/FirePointA.global_translation if pick_side else $Weapons_Primary/Shotgun/FirePointB.global_translation,
+		$Weapons_Primary/Shotgun/FirePointA.global_translation if bool(randi() % 2) else $Weapons_Primary/Shotgun/FirePointB.global_translation,
 		hit_position
 	)
 	set_accuracy_size(1-accuracy)
