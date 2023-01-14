@@ -105,7 +105,7 @@ accuracy_lerp = 0.4
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.338 )
 enabled = true
 cast_to = Vector3( 0, 0, 1000 )
-collision_mask = 125
+collision_mask = 309
 collide_with_areas = true
 
 [node name="Model" type="MeshInstance" parent="."]

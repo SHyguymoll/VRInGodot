@@ -97,13 +97,15 @@ rotate_secondary={
 
 [layer_names]
 
-3d_physics/layer_1="world"
-3d_physics/layer_2="player"
-3d_physics/layer_3="enemies"
-3d_physics/layer_4="coins"
-3d_physics/layer_5="player projectiles"
-3d_physics/layer_6="enemy projectiles"
-3d_physics/layer_7="breakables"
+3d_physics/layer_1="world_collision"
+3d_physics/layer_2="player_hurtbox"
+3d_physics/layer_3="enemy_hurtbox"
+3d_physics/layer_4="coin_detectable"
+3d_physics/layer_5="coin_hurtbox"
+3d_physics/layer_6="player_projectile_hurtbox"
+3d_physics/layer_7="enemy_projectile_hurtbox"
+3d_physics/layer_8="world_interactable_hurtbox"
+3d_physics/layer_9="world_breakable_hurtbox"
 
 [physics]
 

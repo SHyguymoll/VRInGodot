@@ -103,7 +103,7 @@ accuracy_lerp = 1.0
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.657, 0.192 )
 enabled = true
 cast_to = Vector3( 0, 0, 500 )
-collision_mask = 77
+collision_mask = 321
 
 [node name="CoinAimAngle" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.657, 1.358 )

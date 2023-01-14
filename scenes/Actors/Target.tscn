@@ -1,6 +1,56 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://scripts/MeleeEnemy.gd" type="Script" id=1]
+[ext_resource path="res://scripts/Enemy/MeleeEnemy.gd" type="Script" id=1]
+[ext_resource path="res://scripts/Enemy/EnemyHurtbox.gd" type="Script" id=2]
 
-[node name="Target" type="Spatial"]
+[sub_resource type="CapsuleMesh" id=1]
+mid_height = 2.6
+
+[sub_resource type="Animation" id=2]
+resource_name = "Idle"
+
+[sub_resource type="BoxShape" id=3]
+extents = Vector3( 0.791858, 0.868835, 0.590654 )
+
+[sub_resource type="BoxShape" id=4]
+extents = Vector3( 1, 1, 1.52196 )
+
+[sub_resource type="BoxShape" id=5]
+extents = Vector3( 0.556827, 2.06313, 0.660457 )
+
+[node name="Target" type="KinematicBody"]
+collision_layer = 0
+collision_mask = 257
 script = ExtResource( 1 )
+enemy_health = -1.0
+
+[node name="Model" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
+mesh = SubResource( 1 )
+
+[node name="Animations" type="AnimationPlayer" parent="."]
+anims/Idle = SubResource( 2 )
+
+[node name="HurtboxWeakpoint" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.20133, 0 )
+collision_layer = 104
+collision_mask = 4
+script = ExtResource( 2 )
+damage_multiplier = 2.0
+
+[node name="CollisionShape" type="CollisionShape" parent="HurtboxWeakpoint"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.377548, 0 )
+shape = SubResource( 3 )
+
+[node name="Hurtbox" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.532465, 0 )
+collision_layer = 96
+collision_mask = 4
+script = ExtResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Hurtbox"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
+shape = SubResource( 4 )
+
+[node name="WorldCollision" type="CollisionShape" parent="."]
+shape = SubResource( 5 )
