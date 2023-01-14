@@ -83,6 +83,10 @@ func create_bullet_effect(bullet_scene: PackedScene, start:Vector3, end:Vector3)
 	newBullet.set_length(length)
 	newBullet.look_at(end, Vector3.UP)
 
+func gun_damage(hit, dmg_val):
+	if hit != null and hit.has_method("handle_damage"):
+		hit.handle_damage(dmg_val)
+
 func _on_Revolver_fire_weapon(ammo, accuracy, thing_hit, hit_position):
 	$PrimaryAmmo.text = str(ammo) + "/6"
 	var rev_pos = $Weapons_Primary/Revolver/BulletFirePosition.global_translation
@@ -92,8 +96,7 @@ func _on_Revolver_fire_weapon(ammo, accuracy, thing_hit, hit_position):
 		hit_position
 	)
 	make_particle(hit_position, 0)
-	if thing_hit != null and thing_hit.has_method("handle_damage"):
-		thing_hit.handle_damage(1)
+	gun_damage(thing_hit, 1)
 	set_accuracy_size(1-accuracy)
 
 func _on_Revolver_reload_weapon(ammo):
@@ -107,6 +110,7 @@ func _on_Shotgun_fire_weapon(ammo, accuracy, thing_hit, hit_position):
 		$Weapons_Primary/Shotgun/FirePointA.global_translation if bool(randi() % 2) else $Weapons_Primary/Shotgun/FirePointB.global_translation,
 		hit_position
 	)
+	gun_damage(thing_hit, 0.25)
 	set_accuracy_size(1-accuracy)
 
 func _on_Shotgun_reload_weapon(ammo):
@@ -131,7 +135,7 @@ func coin_bullet_rebound(coin: RigidBody, end, dmg_val: float):
 				hopefully_ground.get("position")
 			)
 	else: #this is an area or rigidbody
-		if end.has_method("handle_damage"): end.handle_damage(dmg_val) #all damagable entities require this function!
+		gun_damage(end, dmg_val) #all damagable entities require this function!
 		create_bullet_effect(
 				RevolverBullet,
 				coin.global_translation,
