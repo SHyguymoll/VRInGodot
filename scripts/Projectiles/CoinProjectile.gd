@@ -37,6 +37,7 @@ func _on_LifeTimer_timeout():
 
 func calculate_rebound(detects: Array) -> Node:
 	global_rotation = Vector3.ZERO
+	linear_velocity = Vector3.ZERO
 	print(self, " detected ", detects)
 	var coin = []
 	var enemy = []
@@ -59,10 +60,11 @@ func calculate_rebound(detects: Array) -> Node:
 	var combine_arrays = [coin, enemy, glass, other]
 	for try_array in combine_arrays:
 		for try in try_array:
-			var get_collision = get_world().direct_space_state.intersect_ray(global_translation, try.global_translation, [self, $ShootHurtbox, $Detection, $WorldCollide]).get("collider")
-			print(try, " sees ", get_collision, "? ", try == get_collision)
-			if get_collision == try: #if the coin can see try, it's valid
-				return try
+			return try #xray coin mode
+#			var get_collision = $Detection.get_world().direct_space_state.intersect_ray(global_translation, try.global_translation).get("collider")
+#			print(try, " sees ", get_collision, "? ", try == get_collision)
+#			if get_collision == try: #if the coin can see try, it's valid
+#				return try
 	return self #nothing to reflect towards (somehow)
 
 
