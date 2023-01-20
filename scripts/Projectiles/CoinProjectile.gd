@@ -6,6 +6,8 @@ var active = 0
 var split_shot_active = 1
 var ready_to_rebound = 0
 var damage = 1
+var last_vel = Vector3.ZERO
+const MIN_SPEED = Vector3(0.0001, 0.0001, 0.0001)
 
 func _ready():
 	connect("coin_rebound", $"..", "coin_bullet_rebound")
@@ -15,6 +17,13 @@ func handle_damage(dmg): #All targetable entities must have this function
 	ready_to_rebound = 1
 
 func _physics_process(delta):
+	if active and (
+		((linear_velocity.x < 0 and last_vel.x > 0) or #x bounce check
+		(linear_velocity.y < 0 and last_vel.y > 0) or #y bounce check
+		(linear_velocity.z < 0 and last_vel.z > 0)) or #z bounce check
+		linear_velocity.abs() < MIN_SPEED): #simple speed check
+		print("bounced or stopped")
+		queue_free()
 	if ready_to_rebound:
 		var list_of_detects = $Detection.get_overlapping_areas() + $Detection.get_overlapping_bodies()
 		emit_signal("coin_rebound", self, calculate_rebound(list_of_detects), damage)
@@ -25,6 +34,7 @@ func _physics_process(delta):
 		$Detection.set_deferred("monitoring", false)
 		$WorldCollide.set_deferred("monitoring", false)
 		queue_free()
+	last_vel = linear_velocity
 
 func _on_DeadTimer_timeout():
 	active = 1
@@ -36,8 +46,6 @@ func _on_LifeTimer_timeout():
 	queue_free()
 
 func calculate_rebound(detects: Array) -> Node:
-	global_rotation = Vector3.ZERO
-	linear_velocity = Vector3.ZERO
 	print(self, " detected ", detects)
 	var coin = []
 	var enemy = []
@@ -69,4 +77,5 @@ func calculate_rebound(detects: Array) -> Node:
 
 
 func _on_WorldCollide_area_entered(area):
-	queue_free()
+	if area != self:
+		queue_free()

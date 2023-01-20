@@ -46,7 +46,7 @@ height = 0.002
 extents = Vector3( 70, 70, 70 )
 
 [sub_resource type="BoxShape" id=10]
-extents = Vector3( 0.239785, 0.236619, 0.227352 )
+extents = Vector3( 0.4, 0.4, 0.4 )
 
 [node name="Coin" type="RigidBody"]
 collision_layer = 8
@@ -110,7 +110,6 @@ monitorable = false
 shape = SubResource( 9 )
 
 [node name="WorldCollide" type="Area" parent="."]
-collision_layer = 0
 collision_mask = 257
 monitorable = false
 

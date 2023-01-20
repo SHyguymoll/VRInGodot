@@ -76,7 +76,7 @@ func set_accuracy_size(value):
 
 func create_bullet_effect(bullet_scene: PackedScene, start:Vector3, end:Vector3):
 	var length = start.distance_to(end)
-	#var rot = start.direction_to(end)
+	var rot = end.direction_to(start)
 	var newBullet = bullet_scene.instance()
 	add_child(newBullet)
 	newBullet.global_translate(start.linear_interpolate(end, 0.5))
@@ -120,10 +120,11 @@ func _on_Shotgun_reload_weapon(ammo):
 func _on_Coin_fire_weapon(ammo, _accuracy):
 	$SecondaryAmmo.text = str(ammo) + "/4"
 	var newCoin = CoinProjectile.instance()
-	add_child(newCoin)
+	
 	newCoin.translation = $Weapons_Secondary/Coin/BulletFirePosition.global_translation
 	var dir = ($Weapons_Secondary/Coin/CoinAimAngle.global_translation - newCoin.global_translation).normalized()
 	newCoin.apply_central_impulse(dir * COIN_SPEED)
+	add_child(newCoin)
 
 func coin_bullet_rebound(coin: RigidBody, end, dmg_val: float):
 	if coin == end: #no reflect
